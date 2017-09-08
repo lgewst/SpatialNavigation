@@ -15,6 +15,9 @@
 ## Chrome 동작
 - "--enable-spatial-navigation"로 Chrome 브라우저 실행
 
+## 활용 사례
+- YouTube on TV: https://www.youtube.com/tv
+- Pinterest: https://www.pinterest.co.kr/explore/color-combinations/?lp=true
 
 ## 참고
 - Spatial Navigation in Android TV: https://developer.android.com/training/tv/start/navigation.html
