@@ -1,0 +1,30 @@
+#container {
+  background-color: #fff;
+  width: 825px;
+  height: 600px;
+  margin: 0 auto;
+  border: 1px solid black;
+}
+
+.rectangle {
+  background-color: #FFC0CB;
+  width: 200px;
+  height: 114px;
+  margin: 5px;
+  
+  float: left;
+  outline: 0;
+  display: inline-block; 
+  margin-bottom: 0px;
+  margin-right: 0px;
+
+  color: white;
+  text-align: center;
+  line-height: 114px;
+  vertical-align: top;
+  font-size: 1rem;
+}
+
+.rectangle:focus {
+  background-color: #FF69B4;
+}
