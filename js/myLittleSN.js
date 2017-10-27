@@ -9,16 +9,24 @@ $(function() {
 	$(".rectangle").attr({tabIndex: "-1"});
 	$(".rectangle").focus();
 
-	// get all of candidates
-	// if we can, I want to change this function not getting all of candidates but getting selectively based on direction
-	function getCandidates() {
-		return $(".rectangle:not(:focus)");
+	// get focused element and its position informations
+	function getFocusedElem() {
+		var focusedElem = $(":focus");
+		return getElemPosInfo(focusedElem);
 	}
+
+	// get all of candidates and their position informations
+	function getCandidates() {
+		var candidates = $(".rectangle:not(:focus)");
+		return getAllElemPosInfos(candidates);
+	}
+
 
 	// get element position infomation with ".getBoundingClientRect()"
 	function getElemPosInfo(element) {
 		var posInfoObj = $(element).get(0).getBoundingClientRect();
 		var elemPosInfo = {
+			raw: element,
 			left: posInfoObj.left,
 			top: posInfoObj.top,
 			right: posInfoObj.right,
@@ -34,6 +42,43 @@ $(function() {
 		return elemPosInfo;
 	}
 
+	// get all elements position information
+	function getAllElemPosInfos(elements) {
+		var result = [];
+		$(elements).each(function(index, element) {
+			result.push(getElemPosInfo(element));
+		});
+		
+		return result;
+	}
+
+	// filter the candidates with "isCorrectCandidate"
+	function filterCandidates(focusedElem, candidates, direction) {
+		return $.grep(candidates, function (candidate) {
+			return isCorrectCandidate(focusedElem, candidate, direction);
+		});
+	}
+
+	// determine correct candidate or not based on direciton 
+	function isCorrectCandidate(focusedElem, candidate, direction) {
+		switch(direction) {
+			// case of left
+			case 37 :		
+				return focusedElem.center.x > candidate.center.x;
+			// case of up
+			case 38 :
+				return focusedElem.center.y > candidate.center.y;
+			// case of right
+			case 39 :
+				return focusedElem.center.x < candidate.center.x;
+			// case of down
+			case 40 :
+				return focusedElem.center.y < candidate.center.y;
+			default :
+				return false;
+		}
+	}
+
 	// sort candidates by criteria
 	function prioritizeCandidates(focusedElem, candidates, direction) {
 		candidates.sort(function(a, b) {
@@ -47,77 +92,130 @@ $(function() {
 	// we should implement this function more specific
 	function distanceCalculation(focusedElem, candidate, direction) {
 		var criterion = 0;
-		var focusedElemPosInfo = getElemPosInfo(focusedElem);
-		var candidatePosInfo = getElemPosInfo(candidate);
 
 		switch(direction) {
 			// case of left
 			case 37 :		
-				criterion += Math.abs(focusedElemPosInfo.left - candidatePosInfo.center.x);
-				criterion += Math.abs(focusedElemPosInfo.center.y - candidatePosInfo.center.y);
-			break;
+				criterion += Math.abs(focusedElem.left - candidate.center.x);
+				criterion += Math.abs(focusedElem.center.y - candidate.center.y);
+				break;
 			// case of up
 			case 38 :
-				criterion += Math.abs(focusedElemPosInfo.center.x - candidatePosInfo.center.x);
-				criterion += Math.abs(focusedElemPosInfo.top - candidatePosInfo.center.y);
+				criterion += Math.abs(focusedElem.center.x - candidate.center.x);
+				criterion += Math.abs(focusedElem.top - candidate.center.y);
 				break;
 			// case of right
 			case 39 :
-				criterion += Math.abs(focusedElemPosInfo.right - candidatePosInfo.center.x);
-				criterion += Math.abs(focusedElemPosInfo.center.y - candidatePosInfo.center.y);
+				criterion += Math.abs(focusedElem.right - candidate.center.x);
+				criterion += Math.abs(focusedElem.center.y - candidate.center.y);
 				break;
 			// case of down
 			case 40 :
-				criterion += Math.abs(focusedElemPosInfo.center.x - candidatePosInfo.center.x);
-				criterion += Math.abs(focusedElemPosInfo.bottom - candidatePosInfo.center.y);
+				criterion += Math.abs(focusedElem.center.x - candidate.center.x);
+				criterion += Math.abs(focusedElem.bottom - candidate.center.y);
 				break;
 			default :
-			break;
+				break;
 		}
 
 		return criterion;
 	}
 
-	// determine correct candidate or not based on direciton 
-	function IsCorrectCandidate(focusedElem, candidate, direction) {
-		var focusedElemPosInfo = getElemPosInfo(focusedElem);
-		var candidatePosInfo = getElemPosInfo(candidate);
+	// compare candidateCorner to diagonal of focusedElemCorner1, 2
+	// if candidate corner is on the diagonal, return 0
+	// if candidate corner is over the diagonal, return 1
+	// if candidate corner is under the diagonal, return -1
+	function comparePosByDiagonal(focusedElemCorner1, focusedElemCorner2, candidateCorner) {
+		var slope = (focusedElemCorner1.y - focusedElemCorner2.y) / (focusedElemCorner1.x - focusedElemCorner2.x);
+		var result = (candidateCorner.y - focusedElemCorner1.y) - (slope * (candidateCorner.x - focusedElemCorner1.x));
 
+		if(result == 0)     return  0;
+		else if(result > 0) return  1;
+		else if(result < 0) return -1;
+	}
+
+	// check whether candidate is between two diagonal-extended-lines
+	// you can find definition of "between two diagonal-extended-lines" in the PPT, report
+	function isBetweenDiagonal(focusedElem, candidate, direction) {
 		switch(direction) {
 			// case of left
 			case 37 :		
-				return focusedElemPosInfo.center.x > candidatePosInfo.center.x;
+				return (comparePosByDiagonal(getLeftTopCorner(focusedElem), getRightBottomCorner(focusedElem), getRightBottomCorner(candidate)) == 1 && 
+								comparePosByDiagonal(getLeftBottomCorner(focusedElem), getRightTopCorner(focusedElem), getRightTopCorner(candidate)) == -1);
 			// case of up
 			case 38 :
-				return focusedElemPosInfo.center.y > candidatePosInfo.center.y;
+				return (comparePosByDiagonal(getLeftBottomCorner(focusedElem), getRightTopCorner(focusedElem), getLeftBottomCorner(candidate)) == -1 &&
+								comparePosByDiagonal(getLeftTopCorner(focusedElem), getRightBottomCorner(focusedElem), getRightBottomCorner(candidate)) == -1);
 			// case of right
 			case 39 :
-				return focusedElemPosInfo.center.x < candidatePosInfo.center.x;
+				return (comparePosByDiagonal(getLeftBottomCorner(focusedElem), getRightTopCorner(focusedElem), getLeftBottomCorner(candidate)) == 1 && 
+								comparePosByDiagonal(getLeftTopCorner(focusedElem), getRightBottomCorner(focusedElem), getLeftTopCorner(candidate)) == -1);
 			// case of down
 			case 40 :
-				return focusedElemPosInfo.center.y < candidatePosInfo.center.y;
+				return (comparePosByDiagonal(getLeftBottomCorner(focusedElem), getRightTopCorner(focusedElem), getLeftTopCorner(candidate)) == 1 &&
+								comparePosByDiagonal(getLeftTopCorner(focusedElem), getRightBottomCorner(focusedElem), getRightTopCorner(candidate)) == 1);
 			default :
 				return false;
 		}
 	}
 
-	// filter the candidates with "IsCorrectCandidate"
-	function candidatesFilter(focusedElem, candidates, direction) {
-		return $.grep(candidates, function (candidate) {
-			return IsCorrectCandidate(focusedElem, candidate, direction);
-		});
+	// get left-top corner of element
+	function getLeftTopCorner(element) {
+		return {x: element.left, y: element.top};
+	}
+
+	// get left-bottom corner of element
+	function getLeftBottomCorner(element) {
+		return {x: element.left, y: element.bottom};
+	}
+
+	// get right-top corner of element
+	function getRightTopCorner(element) {
+		return {x: element.right, y: element.top};
+	}
+
+	// get right-bottom corner of element
+	function getRightBottomCorner(element) {
+		return {x: element.right, y: element.bottom};
 	}
 
 	// move focus based on priority
 	function moveFocus(direction) {
-		var candidates = [];
-		var focusedElem = $(":focus");
-
-		candidates = getCandidates();
-		candidates = candidatesFilter(focusedElem, candidates, direction);
+		var focusedElem = getFocusedElem();
+		var candidates = getCandidates();
+		
+		candidates = filterCandidates(focusedElem, candidates, direction);
+		candidates = groupCandidates(focusedElem, candidates, direction);
 		candidates = prioritizeCandidates(focusedElem, candidates, direction);
 
-		$(candidates).first().focus();
+		$(candidates[0].raw).focus();
+	}
+
+	// check whether candidate overlap over the focusedElem
+	function isOverlapped(focusedElem, candidate) {
+		// TODO
+		return false;
+	}
+
+	function groupCandidates(focusedElem, candidates, direction) {
+		groups = [[], [], []];
+
+		$(candidates).each(function(index, candidate) {
+			if(isBetweenDiagonal(focusedElem, candidate, direction)) {
+				if(isOverlapped(focusedElem, candidate)) {
+					// first candidate group
+					groups[0].push(candidate);
+				} else {
+					// second candidate group
+					groups[1].push(candidate);
+				}
+			} else {
+				// third candidate group
+				groups[2].push(candidate);
+			}
+		});
+
+		return groups[0].length ? groups[0] : (groups[1].length ? groups[1] : groups[2]);
 	}
 
 	// make keydown listener
@@ -132,5 +230,4 @@ $(function() {
 	}
 
 	fourWayKeysListener();
-	console.log("length : " + $(":focus").length);
 });
