@@ -1,9 +1,9 @@
 $(function() {
-	// keycode 37 is left arrow
-	// keycode 38 is up arrow
-	// keycode 39 is right arrow
-	// keycode 40 is bottom arrow
-	var directionKeyCode = [37, 38, 39, 40];
+	var focusedElem;
+	var direction;
+
+	// use like enum?
+	var fourWayKey = {left: 37, up: 38, right: 39, down: 40};
 
 	// initialize to be able to focus
 	$(".rectangle").attr({tabIndex: "-1"});
@@ -11,8 +11,7 @@ $(function() {
 
 	// get focused element and its position informations
 	function getFocusedElem() {
-		var focusedElem = $(":focus");
-		return getElemPosInfo(focusedElem);
+		return getElemPosInfo($(":focus"));
 	}
 
 	// get all of candidates and their position informations
@@ -53,26 +52,26 @@ $(function() {
 	}
 
 	// filter the candidates with "isCorrectCandidate"
-	function filterCandidates(focusedElem, candidates, direction) {
+	function filterCandidates(candidates) {
 		return $.grep(candidates, function (candidate) {
-			return isCorrectCandidate(focusedElem, candidate, direction);
+			return isCorrectCandidate(candidate);
 		});
 	}
 
 	// determine correct candidate or not based on direciton 
-	function isCorrectCandidate(focusedElem, candidate, direction) {
+	function isCorrectCandidate(candidate) {
 		switch(direction) {
 			// case of left
-			case 37 :		
+			case fourWayKey.left :		
 				return focusedElem.center.x > candidate.center.x;
 			// case of up
-			case 38 :
+			case fourWayKey.up :
 				return focusedElem.center.y > candidate.center.y;
 			// case of right
-			case 39 :
+			case fourWayKey.right :
 				return focusedElem.center.x < candidate.center.x;
 			// case of down
-			case 40 :
+			case fourWayKey.down :
 				return focusedElem.center.y < candidate.center.y;
 			// ?
 			default :
@@ -95,22 +94,22 @@ $(function() {
 
 	// check whether candidate is between two diagonal-extended-lines
 	// you can find definition of "between two diagonal-extended-lines" in the PPT, report
-	function isBetweenDiagonal(focusedElem, candidate, direction) {
+	function isBetweenDiagonal(candidate) {
 		switch(direction) {
 			// case of left
-			case 37 :		
+			case fourWayKey.left :		
 				return (comparePosByDiagonal(getLeftTopCorner(focusedElem), getRightBottomCorner(focusedElem), getRightBottomCorner(candidate)) == 1 && 
 								comparePosByDiagonal(getLeftBottomCorner(focusedElem), getRightTopCorner(focusedElem), getRightTopCorner(candidate)) == -1);
 			// case of up
-			case 38 :
+			case fourWayKey.up :
 				return (comparePosByDiagonal(getLeftBottomCorner(focusedElem), getRightTopCorner(focusedElem), getLeftBottomCorner(candidate)) == -1 &&
 								comparePosByDiagonal(getLeftTopCorner(focusedElem), getRightBottomCorner(focusedElem), getRightBottomCorner(candidate)) == -1);
 			// case of right
-			case 39 :
+			case fourWayKey.right :
 				return (comparePosByDiagonal(getLeftBottomCorner(focusedElem), getRightTopCorner(focusedElem), getLeftBottomCorner(candidate)) == 1 && 
 								comparePosByDiagonal(getLeftTopCorner(focusedElem), getRightBottomCorner(focusedElem), getLeftTopCorner(candidate)) == -1);
 			// case of down
-			case 40 :
+			case fourWayKey.down :
 				return (comparePosByDiagonal(getLeftBottomCorner(focusedElem), getRightTopCorner(focusedElem), getRightTopCorner(candidate)) == 1 &&
 								comparePosByDiagonal(getLeftTopCorner(focusedElem), getRightBottomCorner(focusedElem), getLeftTopCorner(candidate)) == 1);
 			// ?
@@ -140,30 +139,30 @@ $(function() {
 	}
 
 	// move focus based on priority
-	function moveFocus(direction) {
-		var focusedElem = getFocusedElem();
+	function moveFocus() {
+		focusedElem = getFocusedElem();
 		var candidates = getCandidates();
 		
-		candidates = filterCandidates(focusedElem, candidates, direction);
-		candidates = groupCandidates(focusedElem, candidates, direction);
-		candidates = prioritizeCandidates(focusedElem, candidates, direction);
+		candidates = filterCandidates(candidates);
+		candidates = groupCandidates(candidates);
+		candidates = prioritizeCandidates(candidates);
 
 		$(candidates[0].raw).focus();
 	}
 
 	// check whether candidate overlap over the focusedElem
-	function isOverlapped(focusedElem, candidate) {
+	function isOverlapped(candidate) {
 		// TODO
 		return false;
 	}
 
 	// group the candidates with three levels
-	function groupCandidates(focusedElem, candidates, direction) {
+	function groupCandidates(candidates) {
 		groups = [[], [], []];
 
 		$(candidates).each(function(index, candidate) {
-			if(isBetweenDiagonal(focusedElem, candidate, direction)) {
-				if(isOverlapped(focusedElem, candidate)) {
+			if(isBetweenDiagonal(candidate)) {
+				if(isOverlapped(candidate)) {
 					// first candidate group
 					groups[0].push(candidate);
 				} else {
@@ -181,35 +180,35 @@ $(function() {
 
 	// score the candidate
 	// score = (offset * offset weight) + (center-line-distance * center-line-distance weight)
-	function getScore(focusedElem, candidate, direction) {
+	function getScore(candidate) {
 		// we can change weight as global configuration
 		var offsetWeight = 0.6;
 		var centerLineDistanceWeight = 1 - offsetWeight;
 
-		return (getOffset(focusedElem, candidate, direction) * offsetWeight) + 
-					 (getCenterLineDistance(focusedElem, candidate, direction) * centerLineDistanceWeight);
+		return (getOffset(candidate) * offsetWeight) + 
+					 (getCenterLineDistance(candidate) * centerLineDistanceWeight);
 	}
 
 	// get offset value
 	// you can find definition of offset in the PPT, report
-	function getOffset(focusedElem, candidate, direction) {
+	function getOffset(candidate) {
 		var offset = 0;
 
 		switch(direction) {
 			// case of left
-			case 37 :		
+			case fourWayKey.left :		
 				offset = focusedElem.left - candidate.right;
 				break;
 			// case of up
-			case 38 :
+			case fourWayKey.up :
 				offset = focusedElem.top - candidate.bottom;
 				break;
 			// case of right
-			case 39 :
+			case fourWayKey.right :
 				offset = candidate.left - focusedElem.right;
 				break;
 			// case of down
-			case 40 :
+			case fourWayKey.down :
 				offset = candidate.top - focusedElem.bottom;
 				break;
 			// ?
@@ -221,13 +220,13 @@ $(function() {
 	}
 
 	// get distance between center line of focused element and a side of candidate
-	function getCenterLineDistance(focusedElem, candidate, direction) {
+	function getCenterLineDistance(candidate) {
 		var distance = 0;
 
 		switch(direction) {
 			// case of left and right
-			case 37 :	
-			case 39 :	
+			case fourWayKey.left  :	
+			case fourWayKey.right :	
 				if(focusedElem.center.y > candidate.bottom) {
 					distance = focusedElem.center.y - candidate.bottom;
 				}
@@ -237,8 +236,8 @@ $(function() {
 				}
 				break;
 			// case of up and bottom
-			case 38 :
-			case 40 :
+			case fourWayKey.up   :
+			case fourWayKey.down :
 				if(focusedElem.center.x > candidate.right) {
 					distance = focusedElem.center.x - candidate.right;
 				}
@@ -258,27 +257,27 @@ $(function() {
 	// calculate distance between focused element and candidate element based on direction
 	// we should implement this function more specific
 	// replace this function with "getScore"
-	function distanceCalculation(focusedElem, candidate, direction) {
+	function distanceCalculation(candidate) {
 		var criterion = 0;
 
 		switch(direction) {
 			// case of left
-			case 37 :		
+			case fourWayKey.left :		
 				criterion += Math.abs(focusedElem.left - candidate.center.x);
 				criterion += Math.abs(focusedElem.center.y - candidate.center.y);
 				break;
 			// case of up
-			case 38 :
+			case fourWayKey.up :
 				criterion += Math.abs(focusedElem.center.x - candidate.center.x);
 				criterion += Math.abs(focusedElem.top - candidate.center.y);
 				break;
 			// case of right
-			case 39 :
+			case fourWayKey.right :
 				criterion += Math.abs(focusedElem.right - candidate.center.x);
 				criterion += Math.abs(focusedElem.center.y - candidate.center.y);
 				break;
 			// case of down
-			case 40 :
+			case fourWayKey.down :
 				criterion += Math.abs(focusedElem.center.x - candidate.center.x);
 				criterion += Math.abs(focusedElem.bottom - candidate.center.y);
 				break;
@@ -291,9 +290,9 @@ $(function() {
 	}
 
 	// sort candidates by score
-	function prioritizeCandidates(focusedElem, candidates, direction) {
+	function prioritizeCandidates(candidates) {
 		candidates.sort(function(a, b) {
-			return getScore(focusedElem, a, direction) - getScore(focusedElem, b, direction);
+			return getScore(a) - getScore(b);
 		});
 
 		return candidates;
@@ -302,10 +301,11 @@ $(function() {
 	// make keydown listener
 	function fourWayKeysListener() {
 		$(document).keydown(function(key) {
-			var direction = key.keyCode;
+			direction = key.keyCode;
 			
-			if($.inArray(direction, directionKeyCode) !=  -1) {
-				moveFocus(direction);
+			// whether direction is 37, 38, 39, or 40
+			if(direction >= 37 && direction <= 40) {
+				moveFocus();
 			}
 		}); 
 	}
