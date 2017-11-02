@@ -1,4 +1,17 @@
 $(function() {
+	var configuration = {
+		// define focusable element
+		focusableElements: [":button", ".rectangle"],
+		// this value determine gradient of diagonal
+		// range : 0 ~ 0.5 
+		diagonalGradientRatio: 0.2,
+		// weights use for scoring candidates
+		offsetWeight: 0.6,
+		centerLineDistanceWeight: 0.4,
+		// support loop or not
+		canLoop: false
+	}
+
 	var focusedElem;
 	var direction;
 
@@ -6,20 +19,23 @@ $(function() {
 	var fourWayKey = {left: 37, up: 38, right: 39, down: 40};
 
 	// initialize to be able to focus
-	$(".rectangle").attr({tabIndex: "-1"});
-	$(".rectangle").focus();
+	$(".rectangle").attr('tabindex',-1).focus();
 
 	// get focused element and its position informations
 	function getFocusedElem() {
-		return getElemPosInfo($(":focus"));
+		return getElemPosInfo($(document.activeElement));
 	}
 
 	// get all of candidates and their position informations
 	function getCandidates() {
-		var candidates = $(":button:not(:focus)");
+		var candidates = [];
+
+		$.each(configuration.focusableElements, function(index, element) {
+			candidates = $.merge(candidates, $(element + ":not(:focus)"));
+		}); 
+
 		return getAllElemPosInfos(candidates);
 	}
-
 
 	// get element position infomation with ".getBoundingClientRect()"
 	function getElemPosInfo(element) {
@@ -84,8 +100,24 @@ $(function() {
 	// if candidate corner is over the diagonal, return 1
 	// if candidate corner is under the diagonal, return -1
 	function comparePosByDiagonal(focusedElemCorner1, focusedElemCorner2, candidateCorner) {
-		var slope = (focusedElemCorner1.y - focusedElemCorner2.y) / (focusedElemCorner1.x - focusedElemCorner2.x);
-		var result = (candidateCorner.y - focusedElemCorner1.y) - (slope * (candidateCorner.x - focusedElemCorner1.x));
+		var slope;
+		var result;
+		var gradientFactor;
+
+		if(direction == fourWayKey.left || direction == fourWayKey.right) {
+			gradientFactor = focusedElem.width * configuration.diagonalGradientRatio;
+			slope = (focusedElemCorner1.y - focusedElemCorner2.y) / (focusedElemCorner1.x - focusedElemCorner2.x + (2 * gradientFactor));
+			result = (candidateCorner.y - focusedElemCorner1.y) - (slope * (candidateCorner.x - focusedElemCorner1.x - gradientFactor));
+		}
+
+		if(direction == fourWayKey.up || direction == fourWayKey.down) {
+			gradientFactor = focusedElem.height * configuration.diagonalGradientRatio;
+			slope = (focusedElemCorner1.y - focusedElemCorner2.y + (2 * gradientFactor)) / (focusedElemCorner1.x - focusedElemCorner2.x);
+			result = (candidateCorner.y - focusedElemCorner1.y - gradientFactor) - (slope * (candidateCorner.x - focusedElemCorner1.x));
+		}
+
+		// var slope = (focusedElemCorner1.y - focusedElemCorner2.y) / (focusedElemCorner1.x - focusedElemCorner2.x);
+		// var result = (candidateCorner.y - focusedElemCorner1.y) - (slope * (candidateCorner.x - focusedElemCorner1.x));
 
 		if(result == 0)     return  0;
 		else if(result > 0) return  1;
@@ -97,12 +129,12 @@ $(function() {
 	function isBetweenDiagonal(candidate) {
 		switch(direction) {
 			// case of left
-			case fourWayKey.left :		
+			case fourWayKey.left :
 				return (comparePosByDiagonal(getLeftTopCorner(focusedElem), getRightBottomCorner(focusedElem), getRightBottomCorner(candidate)) == 1 && 
 								comparePosByDiagonal(getLeftBottomCorner(focusedElem), getRightTopCorner(focusedElem), getRightTopCorner(candidate)) == -1);
 			// case of up
 			case fourWayKey.up :
-				return (comparePosByDiagonal(getLeftBottomCorner(focusedElem), getRightTopCorner(focusedElem), getLeftBottomCorner(candidate)) == -1 &&
+				return (comparePosByDiagonal(getRightTopCorner(focusedElem), getLeftBottomCorner(focusedElem), getLeftBottomCorner(candidate)) == -1 &&
 								comparePosByDiagonal(getLeftTopCorner(focusedElem), getRightBottomCorner(focusedElem), getRightBottomCorner(candidate)) == -1);
 			// case of right
 			case fourWayKey.right :
@@ -110,7 +142,7 @@ $(function() {
 								comparePosByDiagonal(getLeftTopCorner(focusedElem), getRightBottomCorner(focusedElem), getLeftTopCorner(candidate)) == -1);
 			// case of down
 			case fourWayKey.down :
-				return (comparePosByDiagonal(getLeftBottomCorner(focusedElem), getRightTopCorner(focusedElem), getRightTopCorner(candidate)) == 1 &&
+				return (comparePosByDiagonal(getRightTopCorner(focusedElem), getLeftBottomCorner(focusedElem), getRightTopCorner(candidate)) == 1 &&
 								comparePosByDiagonal(getLeftTopCorner(focusedElem), getRightBottomCorner(focusedElem), getLeftTopCorner(candidate)) == 1);
 			// ?
 			default :
@@ -140,8 +172,9 @@ $(function() {
 
 	// move focus based on priority
 	function moveFocus() {
-		focusedElem = getFocusedElem();
 		var candidates = getCandidates();
+		focusedElem = getFocusedElem();
+		
 		
 		candidates = filterCandidates(candidates);
 		candidates = groupCandidates(candidates);
@@ -152,8 +185,15 @@ $(function() {
 
 	// check whether candidate overlap over the focusedElem
 	function isOverlapped(candidate) {
-		// TODO
-		return false;
+		result = false;
+
+		if(((focusedElem.top <= candidate.top && focusedElem.bottom >= candidate.top) ||
+			  (focusedElem.top <= candidate.bottom && focusedElem.bottom >= candidate.bottom)) &&
+			 ((focusedElem.left <= candidate.left && focusedElem.right >= candidate.left) ||
+			 	(focusedElem.left <= candidate.right && focusedElem.right >= candidat.right))	
+			) result = true;
+
+		return result;
 	}
 
 	// group the candidates with three levels
@@ -181,12 +221,8 @@ $(function() {
 	// score the candidate
 	// score = (offset * offset weight) + (center-line-distance * center-line-distance weight)
 	function getScore(candidate) {
-		// we can change weight as global configuration
-		var offsetWeight = 0.6;
-		var centerLineDistanceWeight = 1 - offsetWeight;
-
-		return (getOffset(candidate) * offsetWeight) + 
-					 (getCenterLineDistance(candidate) * centerLineDistanceWeight);
+		return (getOffset(candidate) * configuration.offsetWeight) + 
+					 (getCenterLineDistance(candidate) * configuration.centerLineDistanceWeight);
 	}
 
 	// get offset value
