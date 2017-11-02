@@ -190,7 +190,7 @@ $(function() {
 		if(((focusedElem.top <= candidate.top && focusedElem.bottom >= candidate.top) ||
 			  (focusedElem.top <= candidate.bottom && focusedElem.bottom >= candidate.bottom)) &&
 			 ((focusedElem.left <= candidate.left && focusedElem.right >= candidate.left) ||
-			 	(focusedElem.left <= candidate.right && focusedElem.right >= candidat.right))	
+			 	(focusedElem.left <= candidate.right && focusedElem.right >= candidate.right))	
 			) result = true;
 
 		return result;
