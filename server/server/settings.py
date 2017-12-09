@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+from .secrets import *
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -25,7 +26,10 @@ SECRET_KEY = 'c__6eff0_$v&b0$0$5pdcv)pbah1x$h=hw#k%$kny9e^g2nbpe'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'ec2-52-78-167-163.ap-northeast-2.compute.amazonaws.com',
+    'picturesque.ga',
+]
 
 
 # Application definition
@@ -47,6 +51,27 @@ AUTHENTICATION_BACKENDS = [
     'social_core.backends.twitter.TwitterOAuth',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+# Social Auth (keys & secrets are in a git ignored file)
+SOCIAL_AUTH_TWITTER_KEY = get_twitter_consumer_key()
+SOCIAL_AUTH_TWITTER_SECRET = get_twitter_consumer_secret()
+
+SOCIAL_AUTH_FACEBOOK_KEY = get_facebook_app_id()
+SOCIAL_AUTH_FACEBOOK_SECRET = get_facebook_secret_code()
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
+    'fields': 'id, name, email'
+}
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = get_google_client_id()
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_google_client_secret()
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL=''
+
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+LOGIN_ERROR_URL=''
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

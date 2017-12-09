@@ -17,8 +17,12 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+LOGIN_REDIRECT_URL='/'
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    # url(r'^picturesque/', include('picturesque.urls')),
     url(r'^social/', include('social_django.urls', namespace='social')),
 ]
+
