@@ -22,7 +22,7 @@ SOCIAL_AUTH_URL_NAMESPACE = 'social'
 LOGIN_REDIRECT_URL='/'
 
 urlpatterns = [
+    url(r'^$', include('picturesque.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^social/', include('social_django.urls', namespace='social')),
 ]
-
