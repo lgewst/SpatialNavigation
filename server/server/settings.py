@@ -29,8 +29,9 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'ec2-52-78-167-163.ap-northeast-2.compute.amazonaws.com',
     'picturesque.ga',
+    '52.78.167.163',
+    'localhost'
 ]
-
 
 # Application definition
 
@@ -85,9 +86,11 @@ AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 STATICFILES_LOCATION = 'static'
 STATICFILES_STORAGE = 'custom_storages.StaticStorage'
 
-MEDIAFILES_LOCATION = 'picturesque'
+MEDIAFILES_LOCATION = 'media'
 DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
