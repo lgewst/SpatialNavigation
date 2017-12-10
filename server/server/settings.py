@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social_django',
+    'storages',
 ]
 
 AUTHENTICATION_BACKENDS = [
@@ -71,6 +72,19 @@ SOCIAL_AUTH_LOGIN_REDIRECT_URL=''
 
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 LOGIN_ERROR_URL=''
+
+# AWS Settings
+AWS_STORAGE_BUCKET_NAME = 'picturesqueimages'
+AWS_S3_REGION_NAME = 'ap-northeast-2'
+AWS_ACCESS_KEY_ID = get_aws_access_key_id()
+AWS_SECRET_ACCESS_KEY = get_aws_secret_access_key()
+
+# Tell django-storages the domain to use to refer to static files.
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+# Tell the staticfiles app to use S3Boto3 storage when writing the collected static files (when
+# you run `collectstatic`).
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
 MIDDLEWARE = [
