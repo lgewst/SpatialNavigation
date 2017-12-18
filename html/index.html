@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Index</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/main.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="../js/myLittleSN.js"></script>
+	<script type="text/javascript"> // for pop-up layer
+	    function wrapWindowByMask(){
+	        var maskHeight = $(document).height();
+	        var maskWidth = $(window).width();
+	        $('.mask').css({'width':maskWidth,'height':maskHeight});
+	        $('.mask').fadeTo("slow", 0.5);
+
+	        var left = ( $(window).scrollLeft() + ( $(window).width() - $('.window').width()) / 2 );
+	        var top = ( $(window).scrollTop() + ( $(window).height() - $('.window').height()) / 2 );
+	 
+	        $('.window').css({'left':left,'top':top, 'position':'absolute'});
+	 
+	        $('.window').show();	        
+	    }
+	 
+	    $(document).ready(function(){
+	        $('.showMask').click(function(e){
+	            e.preventDefault();
+	            wrapWindowByMask();
+	        });
+
+	        $('.window .close').click(function (e) {
+	            e.preventDefault();
+	            $('.mask, .window').hide();
+	        });
+	 
+	        $('.mask').click(function () {
+	            $(this).hide();
+	            $('.window').hide();
+	        });
+	    });
+	</script>
+</head>
+<body>
+
+	<br>
+	<header>
+		<div class="main" style="height: 130px;">
+			<div style="flex: 9; width: 480px; height: 130px;">
+				<a href="javascript:window.location.reload(true);"><img src="./images/logo.png" style="width:40%;"></a>	
+			</div>
+			<div style="flex: 1; height: 130px; position: relative; top: 40%">
+				<button class="pink" style="vertical-align: bottom;" onclick="location.href='#'; return false;"><strong>sign in</strong></button>
+			</div>
+		</div>
+	</header>
+
+	<main>
+		<br>
+		<div class="content" style="display: flex;">
+			<div style="flex: 8; position: relative; bottom: 8px;">
+				<button class="tag"><strong>#main</strong></button>
+			</div>
+			<div style="flex: 2; width: 40%; position: relative; left: 2%;">
+				<div class="search">
+					<input type="text" class="searchbox" placeholder=" search tags">
+					<button type="submit" class="searchbutton"><i class="fa fa-search"></i></button>
+				</div>
+			</div>
+		</div>
+
+		<br>
+		<div style="text-align: center;">
+			<a href="#" class="showMask"><img src="./images/main.png" style="width: 80%;"></a>
+
+		    <div class="mask"></div>
+		    <div class="window">
+		    	<button hrep="#" class="close"><i class="fa fa-close"></i></button>
+		    	<img src="./images/kid.jpg" style="width: 100%">
+		    </div>
+
+		    <button class="icon" style="position: absolute; left: 20px; top: 550px;">
+		    	<i class="fa fa-caret-left" style="font-size:60px; color: #F67280"></i>
+		    </button>
+		    <button class="icon" style="position: absolute; right: 20px; top: 550px;">
+		    	<i class="fa fa-caret-right" style="font-size:60px; color: #F67280"></i>
+		    </button>
+
+		</div>
+		<br>
+	</main>
+	
+	<!-- <footer>
+		<div class="footer">
+			<p>Copyright ⓒ2017 Team T All Rights Reserved.</p>
+		</div>
+	</footer> -->
+
+</body>
+</html>

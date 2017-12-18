@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css?family=Saira');
+body, html {
+  margin: 0;
+}
+header {
+  margin: 0 auto;
+}
+header:after {
+  background: #F67280;
+  content: '';
+  display: block;
+  height: 2.5px;
+  margin: 0px;
+}
+main {
+  margin-bottom: -100px;
+}
+footer {
+  position: relative;
+  bottom: 0px;
+}
+.footer {
+  text-align: center;
+  color: gray;
+  font-size: 10px;
+}
+h2 {
+  font-family: 'Saira', sans-serif;
+}
+h3 {
+  text-align: center;
+  font-family: 'Saira', sans-serif;
+}
+h3:before {
+  background: #F67280;
+  content: '';
+  display: block;
+  height: 2px;
+  margin: 30px;
+  margin-top: 0px;
+}
+h5 {
+  font-family: 'Saira', sans-serif;
+  text-align: center;
+  color: gray;
+}
+.verline {
+  background: #F67280;
+  content: '';
+  display: block;
+  width: 2px;
+  height: 400px;
+  margin: 30px;
+  margin-top: 100px;
+  margin-bottom: 0px;
+}
+.main {
+  margin: 0 auto;
+  width: 77%;
+  display: flex;
+}
+.logo {
+  margin: 0 auto;
+  margin-top: 100px;
+  text-align: center;
+  width: 100%;
+}
+.content {
+  display: block;
+  margin: 0 auto;
+  width: 70%;
+  height: 100%;
+  vertical-align: middle;
+}
+.search {
+  width: 100%;
+  position: relative;
+}
+.tagbox {
+  margin: 10px;
+  width: 105px;
+  height: 25px;
+  padding: 5px;
+  border-color: #F67280;
+  border-style: solid;
+  border-radius: 0.5em;
+  outline: none;
+  color: gray;
+  font-family: 'Saira', sans-serif;
+}
+.tagbox:focus {
+  color: #F8B195;
+}
+.searchbox {
+  float: left;
+  width: 100%;
+  height: 20px;
+  border: 3px solid #F67280;
+  padding: 5px;
+  border-radius: 0.5em;
+  outline: none;
+  color: gray;
+  font-family: 'Saira', sans-serif;
+}
+.searchbox:focus {
+  color: #F8B195;
+}
+.searchbutton {
+  position: absolute;
+  top: -10px;
+  right: -26px;
+  width: 40px;
+  height: 36px;
+  border: 1px solid #F67280;
+  background: #F67280;
+  text-align: center;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 20px;
+}
+.searchbutton:focus {
+  background-color: #F67280;
+  color: #fff;
+  border: none;
+  outline: dashed #F8B195;
+}
+button {
+  margin: 10px;
+  width: 120px;
+  height: 40px;
+  border-radius: 0.5em;
+  font-size: 15px;
+  font-family: 'Saira', sans-serif;
+  text-align: center;
+  vertical-align: middle;
+  border-style: solid;
+}
+button:focus {
+  background-color: #F8B195;
+  color: #fff;
+  border-color: #F8B195;
+  outline: none;
+}
+.icon {
+  margin: 0px;
+  width: 60px;
+  height: 60px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+.icon:focus {
+  background-color: transparent;
+  color: #F67280;
+  border: none;
+  outline: dashed 4px #F8B195;
+}
+.pink {
+  background-color: #F67280;
+  color: #fff;
+  border-color: #F67280;
+}
+.white {
+  background-color: #fff;
+  color: #F67280;
+  border-color: #F67280;
+}
+.tag {
+  margin: 0px;
+  width: 120px;
+  height: 60px;
+  border-radius: 0.5em;
+  border-style: none;
+  background-color: #fff;
+  color: black;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 30px;
+}
+.tag:focus {
+  background-color: #fff;
+  color: black;
+  border-color: #fff;
+  outline-color: #F8B195;
+  outline-style: dashed;
+  outline-width: 4px;
+}
+a:focus {
+  outline-color: #F8B195;
+  outline-style: dashed;
+  outline-width: 4px;
+}
+
+.mask {
+  position:absolute;
+  left:0;
+  top:0;
+  z-index:999;
+  background-color:#000;
+  display:none;
+}
+.window {
+  display: none;
+  height: 90%;
+  width: 90%;
+  z-index:99999;
+}
+.close {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 40px;
+  height: 36px;
+  border-color: rgba( 255, 255, 255, 0 );
+  background-color: rgba( 255, 255, 255, 0 );
+  text-align: center;
+  color: #F67280;
+  cursor: pointer;
+  font-size: 20px;
+}

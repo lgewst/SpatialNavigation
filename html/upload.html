@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Upload</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/main.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="../js/myLittleSN.js"></script>
+	<script language="javascript" type="text/javascript">
+		$(function() {
+		$('#btn-upload').click(function(e) {
+			e.preventDefault();
+			$("input:file").click();
+			var ext = $("input:file").val().split(".").pop().toLowerCase();
+			if(ext.length > 0) {
+				if($.inArray(ext, ["gif","png","jpg","jpeg"]) == -1) {
+					alert("You can only upload jpg, png, gif files.");
+					return false;
+				}
+			}
+			$("input:file").val().toLowerCase();
+		});
+		});
+	</script>
+	<script language="javascript" type="text/javascript">
+		function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#preview')
+                        .attr('src', e.target.result);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+	</script>
+</head>
+<body>
+
+	<div class="content" style="display: flex; width: 85%">
+		<div class="logo" style="flex: 6; position: relative; left: 50px;">
+			<a href="javascript:void(0);" onclick="location.href='#'; return false;"><img src="./images/logo.png" style="width:60%"></a>
+			<br>
+			<img id="preview" style="max-width: 400px; max-height: 250px;">
+		</div>
+		<div class="verline"></div>
+		<div style="flex: 4; position: relative; top: 137px; left: 20px;">
+			<!-- <h5>Use the button below to open an image that's on your computer.</h5> -->
+			<input type="file" onchange="readURL(this);" id='file' name='file' style="display: none;">
+			<button id="btn-upload" class="pink"><strong>select</strong></button>
+
+			
+
+			<div style="position: relative; top: 17px;">
+				<div>
+				<i class="fa fa-hashtag" style="position: absolute; top: 20px; left: -20px; color: #F67280"></i>
+				<input type="text" class="tagbox" placeholder=" add tags">
+				</div>
+				
+			</div>
+
+			<div style="position: relative; top: 147px; height: 50px">
+			<button class="pink" onclick="location.href='#'; return false;"><strong>submit</strong></button>
+			<button class="white" onclick="javascript:history.back()"><strong>cancel</strong></button>	
+			</div>
+			
+		</div>
+	</div>
+
+</body>
+</html>
