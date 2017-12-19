@@ -57,12 +57,19 @@ $(function() {
     var scope;
 
     for(var i=0; i<configuration.scopeDecidableElements.length; i++) {
-    	if($.contains($(configuration.scopeDecidableElements[i]).get(0), document.activeElement)) {	//document.activeElement
+    	if($.contains($(configuration.scopeDecidableElements[i]).get(0), document.activeElement)) {
     		scope = $(configuration.scopeDecidableElements[i]).get(0);
     		break;
     	}
     }
-
+/*
+    for(var i=0; i<configuration.scopeDecidableElements.length; i++) {
+    	if($(document.activeElement).parent().is(configuration.scopeDecidableElements[i])) {
+    		scope = $(document.activeElement).parent().get(0);
+    		break;
+    	}
+    }
+*/
     if(scope == null) {
     	return candidates;
     }
@@ -324,6 +331,18 @@ $(function() {
 			 	(focusedElem.left <= candidate.right && focusedElem.right >= candidate.right))	
 			) result = true;
 
+
+
+		return result;
+	}
+
+	// check whether focusedElem include in candidate
+	function isIncluded(candidate) {
+		result = false;
+
+		if(focusedElem.top >= candidate.top && focusedElem.bottom <= candidate.bottom && 
+			 focusedElem.left >= candidate.left && focusedElem.right <= candidate.right) result = true;
+
 		return result;
 	}
 
@@ -332,6 +351,11 @@ $(function() {
 		groups = [[], [], []];
 
 		$(candidates).each(function(index, candidate) {
+			if(isIncluded(candidate)) {
+				// first candidate group
+				groups[0].push(candidate);
+			}
+
 			if(isBetweenDiagonal(candidate)) {
 				if(isOverlapped(candidate)) {
 					// first candidate group
@@ -398,10 +422,10 @@ $(function() {
 			case fourWayKey.right :	
 				if(focusedElem.center.y > candidate.bottom) {
 					distance = focusedElem.center.y - candidate.bottom;
-				}
-
-				if(candidate.top > focusedElem.center.y) {
+				} else if(candidate.top > focusedElem.center.y) {
 					distance = candidate.top - focusedElem.center.y;
+				} else {
+					distance = Math.abs(candidate.center.y - focusedElem.center.y)/100;
 				}
 				break;
 			// case of up and bottom
@@ -409,10 +433,10 @@ $(function() {
 			case fourWayKey.down :
 				if(focusedElem.center.x > candidate.right) {
 					distance = focusedElem.center.x - candidate.right;
-				}
-
-				if(candidate.left > focusedElem.center.x) {
+				} else if(candidate.left > focusedElem.center.x) {
 					distance = candidate.left - focusedElem.center.x;
+				} else {
+					distance = Math.abs(candidate.center.x - focusedElem.center.x)/100;
 				}
 				break;
 			// ?
