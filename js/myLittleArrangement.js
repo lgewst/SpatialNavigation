@@ -146,4 +146,43 @@ $(function() {
 	// nyopnyop();
 
 	// TODO : randomRatioGeneration(4, 4);
-}); 
+	$(document).ready(
+		var url = function() {
+			var width = ;
+			var height = ;
+
+			var data = "http://picturesque.ga/api/get_image/" + width + ":" + height + "/";
+
+			$.ajax ({
+				url: data,
+				type: "POST",
+				data: data,
+				processData: false,
+				contentType: false,
+				success: function(response) {
+					alert("success");
+				},
+				error: function(response) {
+					alert("post error");
+				}
+			});
+			return data;
+		};
+		function() {
+			var id, image_url;
+			$.ajax ({
+				url: url,
+				type: "GET",
+				data: {"id":"id", "image_url":"image_url"},
+				dataType: 'json',
+				processData: false,
+				contentType: false,
+				success: function(json) {
+					alert("success");
+				},
+				error: function(response) {
+					alert("get error");
+				}
+			});
+		};);
+	}); 
