@@ -7,13 +7,32 @@ from django.core.files.storage import default_storage
 
 from .models import *
 
+import random
+
 # Create your views here.
 def index(request):
     return HttpResponse("Hello World! Welcome to picturesque.")
 
 def get_image(request, size, tag):
     if request.method == 'GET':
-        return HttpResponse('tag: ' + tag + ', size: ' + size)
+        try:
+            ratio = Ratio.objects.get(name=size)
+            images = ratio.images
+            if (tag != ''):
+                maintag = Tag.objects.get(name=tag)
+                images = images.filter(tags=maintag)
+
+            if (len(list(images.all().values())) == 0):
+                return HttpResponseNotFound()
+
+            image = random.choice(list(images.all().values()))
+
+            image_json = {}
+            image_json['image_url'] = default_storage.url(image['url'])
+            image_json['id'] = image['id']
+            return JsonResponse(image_json)
+        except (Ratio.DoesNotExist, Tag.DoesNotExist):
+            return HttpResponseNotFound()
     else:
         return HttpResponseNotAllowed(['GET'])
 
@@ -26,15 +45,15 @@ def detail_image(request, id):
         try:
             image = Image.objects.get(id=image_id)
 
-            image_dict = {}
-            image_dict['image_url'] = default_storage.url(image.url)
+            image_json = {}
+            image_json['image_url'] = default_storage.url(image.url)
 
             tags = []
             for tag in image.tags.all():
                 tags.append(tag.name)
 
-            image_dict['tags'] = tags
-            return JsonResponse(image_dict)
+            image_json['tags'] = tags
+            return JsonResponse(image_json)
         except Image.DoesNotExist:
             return HttpResponseNotFound()
     else:
@@ -82,9 +101,7 @@ def save_image(request):
 def get_ratio(width, height):
     ratio = width / height
 
-    if (ratio < 0.27):
-        key = 0.25
-    elif (0.27 <= ratio < 0.4):
+    if (ratio < 0.4):
         key = 0.33
     elif (0.4 <= ratio < 0.6):
         key = 0.50
@@ -100,10 +117,8 @@ def get_ratio(width, height):
         key = 1.50
     elif (1.75 <= ratio < 2.5):
         key = 2.00
-    elif (2.5 <= ratio < 3.5):
-        key = 3.00
     else:
-        key = 4.00
+        key = 3.00
 
     return Ratio.objects.get(value=key)
 
