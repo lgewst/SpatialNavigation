@@ -33,8 +33,6 @@ $(function() {
 		var maxRatio = estimateMaxRatio(arrangementPos);
 		var ratios = randomRatioGeneration(maxRatio[rect.width], maxRatio[rect.height]);
 
-		console.log("width : " + ratios[rect.width] + ", height : " + ratios[rect.height]);
-
 		imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x]);
 		var imgPosInfo = $("#img" + cnt).get(0).getBoundingClientRect();
 
@@ -65,8 +63,10 @@ $(function() {
 		cnt++;
 	}
 
+	//$(".basic").attr('tabindex',-1).focus();
+
 	function imageMaker(width, height, top, left) {
-		$("#container").append("<img id=\"img" + cnt + "\"src=\"img/forbidden.jpg\" class=\"basic\" style=\"position: absoulte; top:" + top + "px; left:" + left
+		$("#container").append("<img id=\"img" + cnt + "\"src=\"img/forbidden.jpg\" class=\"basic\" tabindex=\"-1\" style=\"position: absoulte; top:" + top + "px; left:" + left
 													 + "px; width:" + width * basicElementSide + "px; height:"  + height * basicElementSide + "px;\">");
 	}
 

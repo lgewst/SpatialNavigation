@@ -1,7 +1,7 @@
 $(function() {
 	var configuration = {
 		// define focusable element
-		focusableElements: [":button", ".rectangle"],
+		focusableElements: [":button", ".rectangle", ".basic"],
 
     // define scope decidable element
     scopeDecidableElements: ["div"],
