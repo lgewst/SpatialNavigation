@@ -38,8 +38,11 @@ def save_image(request):
                 image_model.tags.add(Tag.objects.create(name=tag))
 
         image_model.save()
+        '''
         return render(request, 'upload.html', {
             'message': 'upload success!'
         })
+        '''
+        return HttpResponse('Upload Success!')
 
     return render(request, 'upload.html')

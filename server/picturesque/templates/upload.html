@@ -9,8 +9,10 @@
 {% block content %}
 <form method="post" enctype="multipart/form-data">
   {% csrf_token %}
-  <input type="file" name="image">
-  <input name="tags">
+  <input type="file" name="image"><br>
+  tags: <input name="tags"><br>
+  width: <input name="width"><br>
+  height: <input name="height"><br>
   <button type="submit">Upload</button>
 </form>
 
@@ -20,6 +22,4 @@
 
 {% endblock %}
 </html>
-
-
 
