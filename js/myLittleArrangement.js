@@ -145,5 +145,5 @@ $(function() {
   containerPosInfo = $("#container").get(0).getBoundingClientRect();
 	// nyopnyop();
 
-	// TODO :
+	// TODO : randomRatioGeneration(4, 4);
 }); 
