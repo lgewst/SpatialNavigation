@@ -28,6 +28,7 @@ def save_image(request):
         image_model = Image(uploader=uploader, url=image_url, width=width, height=height, uploaded_at=uploaded_at)
         image_model.save()
 
+        tags = tags.lower()
         tags_split = tags.split(' ')
 
         for tag in tags_split:

@@ -44,20 +44,36 @@
 	</script>
 	<script type="text/javascript">
 		function uploadFile() {
+			var httpRequest;
+			document.getElementById("submit").onclick = function() {makeRequest('')}
 			var imgFile = $('#file').files[0];
+			var width = $('#file').width();
+			var height = $('#file').height();
+			var elem = $('#tags').value;
+			var tags = jquery.makeArray(elem);
 			var formData = new formData();
-			formData.append("fileToUpload", imgFile);
+			formData.append("imageFile", imgFile);
+			formData.append("width", width);
+			formData.append("height", height);
+			formData.append("tagArray", tags);
 			$.ajax ({
-				url: "",
+				url: "http://picturesque.ga/api/save_image",
 				type: "POST",
 				data: formData,
 				processData: false,
 				contentType: false,
 				success: function(response) {
-
+					;
 				}
 			});
 		}
+	</script>
+
+	<script type="text/javascript">
+		(function() {
+			var httpRequest;
+			documents.getElementById()
+		})
 	</script>
 
 </head>
@@ -65,36 +81,39 @@
 
 	<div class="content" style="display: flex; width: 85%">
 		<div class="logo" style="flex: 6; position: relative; left: 50px;">
-			<a href="javascript:void(0);" onclick="location.href='file:///C:/Users/KN7/Documents/2017%20%EA%B0%80%EC%9D%84%ED%95%99%EA%B8%B0/%EC%B0%BD%EC%9D%98%EC%A0%81%ED%86%B5%ED%95%A9%EC%84%A4%EA%B3%84/Skeleton/html/index.html'; return false;"><img src="./images/logo.png" style="width:60%"></a>
+			<a href="javascript:void(0);" onclick="location.href='https://s3.ap-northeast-2.amazonaws.com/picturesqueimages/front/html/index_signed.html'; return false;"><img src="./images/logo.png" style="width:60%"></a>
 			<br>
 			<img id="preview" style="max-width: 400px; max-height: 250px;">
 		</div>
 		<div class="verline"></div>
 		<div style="flex: 4; position: relative; top: 200px; left: 20px; height: 200px">
 			<!-- <h5>Use the button below to open an image that's on your computer.</h5> -->
-			<div>
-				<input type="file" onchange="readURL(this);" id='file' name='file' style="display: none;">
-				<button id="btn-upload" class="pink"><strong>select</strong></button>
-			</div>
+			<form method="post" enctype="multipart/form-data">
+				<div>
+					<input type="file" onchange="readURL(this);" id='file' name='file' style="display: none;">
+					<button id="btn-upload" class="pink"><strong>select</strong></button>
+				</div>
 
-			<div>
-				<i class="fa fa-hashtag" style="position: absolute; top: 82px; left: -12px; color: #F67280"></i>
-				<i class="fa fa-hashtag" style="position: absolute; top: 82px; left: 134px; color: #F67280"></i>
-				<i class="fa fa-hashtag" style="position: absolute; top: 142px; left: -12px; color: #F67280"></i>
-				<i class="fa fa-hashtag" style="position: absolute; top: 142px; left: 134px; color: #F67280"></i>
-				<i class="fa fa-hashtag" style="position: absolute; top: 202px; left: -12px; color: #F67280"></i>
-				<i class="fa fa-hashtag" style="position: absolute; top: 202px; left: 134px; color: #F67280"></i>
-				<input type="text" class="tagbox" placeholder=" add">
-				<input type="text" class="tagbox" placeholder=" tags">
-				<input type="text" class="tagbox" placeholder=" that">
-				<input type="text" class="tagbox" placeholder=" describes">
-				<input type="text" class="tagbox" placeholder=" your">
-				<input type="text" class="tagbox" placeholder=" image">
-			</div>
-			<div>
-				<button class="pink" onclick="location.href='file:///C:/Users/KN7/Documents/2017%20%EA%B0%80%EC%9D%84%ED%95%99%EA%B8%B0/%EC%B0%BD%EC%9D%98%EC%A0%81%ED%86%B5%ED%95%A9%EC%84%A4%EA%B3%84/Skeleton/html/upload_success.html'; return false;"><strong>submit</strong></button>
-				<button class="white" onclick="javascript:history.back()"><strong>cancel</strong></button>
-			</div>
+				<div>
+					<i class="fa fa-hashtag" style="position: absolute; top: 82px; left: -12px; color: #F67280"></i>
+					<i class="fa fa-hashtag" style="position: absolute; top: 82px; left: 134px; color: #F67280"></i>
+					<i class="fa fa-hashtag" style="position: absolute; top: 142px; left: -12px; color: #F67280"></i>
+					<i class="fa fa-hashtag" style="position: absolute; top: 142px; left: 134px; color: #F67280"></i>
+					<i class="fa fa-hashtag" style="position: absolute; top: 202px; left: -12px; color: #F67280"></i>
+					<i class="fa fa-hashtag" style="position: absolute; top: 202px; left: 134px; color: #F67280"></i>
+					<input name="tags" type="text" class="tagbox" placeholder=" add">
+					<input name="tags" type="text" class="tagbox" placeholder=" tags">
+					<input name="tags" type="text" class="tagbox" placeholder=" that">
+					<input name="tags" type="text" class="tagbox" placeholder=" describes">
+					<input name="tags" type="text" class="tagbox" placeholder=" your">
+					<input name="tags" type="text" class="tagbox" placeholder=" image">
+				</div>
+				<div>
+					<button class="pink" id="submit" type="submit" onclick="location.href='https://s3.ap-northeast-2.amazonaws.com/picturesqueimages/front/html/upload_success.html'; return false;"><strong>submit</strong></button>
+					<button class="white" onclick="javascript:history.back()"><strong>cancel</strong></button>
+				</div>
+			</form>
+			
 		</div>
 
 	</div>
