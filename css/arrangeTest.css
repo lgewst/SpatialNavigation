@@ -1,0 +1,25 @@
+.basic {
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	border: 0px solid #fff;
+  
+  float: left;
+  outline: 0;
+  display: inline-block; 
+  margin-bottom: 0px;
+  margin-right: 0px;
+
+  position: absolute;
+
+  padding-bottom: 10px;
+  padding-right: 10px;
+}
+
+#container {
+	border: 1px solid black;
+  background-color: #fff;
+  margin: 0 auto;
+
+  position: relative;
+}
