@@ -425,7 +425,7 @@ $(function() {
 				} else if(candidate.top > focusedElem.center.y) {
 					distance = candidate.top - focusedElem.center.y;
 				} else {
-					distance = Math.abs(candidate.center.y - focusedElem.center.y);
+					distance = Math.abs(candidate.center.y - focusedElem.center.y)/100;
 				}
 				break;
 			// case of up and bottom
@@ -436,7 +436,7 @@ $(function() {
 				} else if(candidate.left > focusedElem.center.x) {
 					distance = candidate.left - focusedElem.center.x;
 				} else {
-					distance = Math.abs(candidate.center.x - focusedElem.center.x);
+					distance = Math.abs(candidate.center.x - focusedElem.center.x)/100;
 				}
 				break;
 			// ?
