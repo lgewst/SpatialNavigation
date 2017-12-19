@@ -1,10 +1,9 @@
-$(function() {
-	var configuration = {
+var configuration = {
 		// define focusable element
-		focusableElements: [":button", ".rectangle", ".basic"],
+		focusableElements: [], // ":button", ".rectangle", ".basic"
 
     // define scope decidable element
-    scopeDecidableElements: ["div"],
+    scopeDecidableElements: [], // "div"
 
 		// this value determine gradient of diagonal
 		// range : 0 ~ 0.5 
@@ -19,7 +18,10 @@ $(function() {
 
 		// support 3rd candidate system or not
 		canThirdCandidatesSelect: false
-	}
+	};
+
+$(function() {
+
 
 	var focusedElem;
 	var direction;
@@ -40,7 +42,7 @@ $(function() {
 		var candidates = [];
 
 		$.each(configuration.focusableElements, function(index, element) {
-			candidates = $.merge(candidates, $(element + ":not(:focus)"));
+			candidates = $.merge(candidates, $(element + ":not(:focus)").filter(":visible"));
 		}); 
 
 		return getAllElemPosInfos(candidates);
@@ -49,12 +51,36 @@ $(function() {
   // get position information of candidates in the scope
   function getCandidatesInScope() {
     var candidates = [];
+    var scope;
+
+    for(var i=0; i<configuration.scopeDecidableElements.length; i++) {
+    	if($.contains($(configuration.scopeDecidableElements[i]).get(0), document.activeElement)) {	//document.activeElement
+    		scope = $(configuration.scopeDecidableElements[i]).get(0);
+    		break;
+    	}
+    }
+
+    if(scope == null) {
+    	return candidates;
+    }
+
+    $.each(configuration.focusableElements, function(index, element) {
+      $.each($(element + ":not(:focus)").filter(":visible"), function(inner_index, inner_element) {
+      	if($.contains(scope, inner_element)) {
+      		candidates.push(inner_element);
+      	}
+      });
+    }); 
+
+    return getAllElemPosInfos(candidates);
+
+    /*var candidates = [];
 
     $.each(configuration.focusableElements, function(index, element) {
       candidates = $.merge(candidates, $(document.activeElement).siblings(element + ":not(:focus)"));
     }); 
 
-    return getAllElemPosInfos(candidates);    
+    return getAllElemPosInfos(candidates); */
   }
 
   // get position information of all candidates
@@ -62,7 +88,7 @@ $(function() {
     var candidates = [];
 
     $.each(configuration.focusableElements, function(index, element) {
-      candidates = $.merge(candidates, $(element + ":not(:focus)"));
+      candidates = $.merge(candidates, $(element + ":not(:focus)").filter(":visible"));
     }); 
 
     return getAllElemPosInfos(candidates);   
@@ -70,7 +96,14 @@ $(function() {
 
 	// get element position infomation with ".getBoundingClientRect()"
 	function getElemPosInfo(element) {
-		var posInfoObj = $(element).get(0).getBoundingClientRect();
+		var posInfoObj;
+
+		if($(element).is("a")) {
+			posInfoObj = $(element).children()[0].getBoundingClientRect();
+		} else {
+			posInfoObj = $(element).get(0).getBoundingClientRect();
+		}
+
 		var elemPosInfo = {
 			raw: element,
 			left: posInfoObj.left,
@@ -217,8 +250,7 @@ $(function() {
     candidates = prioritizeCandidates(candidates);
 
     if(candidates.length) {
-      $(candidates[0].raw).focus();
-
+      candidates[0].raw.focus();
       return true;
     }
 
