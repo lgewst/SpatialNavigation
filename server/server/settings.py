@@ -69,7 +69,7 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = get_google_client_secret()
 
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = \
-    'https://s3.ap-northeast-2.amazonaws.com/picturesqueimages/front/html/index_signed.html'
+    'http://s3.ap-northeast-2.amazonaws.com/picturesqueimages/front/html/index_signed.html'
 
 SOCIAL_AUTH_RAISE_EXCEPTIONS = False
 LOGIN_ERROR_URL=''

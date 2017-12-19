@@ -14,6 +14,13 @@ def index(request):
     return HttpResponse("Hello World! Welcome to picturesque.")
 
 def get_image(request, size, tag):
+    if (size == '2:2' or '3:3' or '4:4'):
+        size = '1:1'
+    elif (size == '2:4'):
+        size = '1:2'
+    elif (size == '4:2'):
+        size = '2:1'
+
     if request.method == 'GET':
         try:
             ratio = Ratio.objects.get(name=size)
