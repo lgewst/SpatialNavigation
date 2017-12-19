@@ -3,4 +3,5 @@ from .models import *
 
 # Register your models here.
 admin.site.register(Tag)
+admin.site.register(Ratio)
 admin.site.register(Image)

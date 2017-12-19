@@ -10,6 +10,13 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+class Ratio(models.Model):
+    name = models.CharField(max_length=4)
+    value = models.DecimalField(max_digits=3, decimal_places=2)
+
+    def __str__(self):
+        return self.name
+
 class Image(models.Model):
     uploader = models.ForeignKey(
         User,
@@ -20,6 +27,12 @@ class Image(models.Model):
     url = models.CharField(max_length=255)
     width = models.IntegerField()
     height = models.IntegerField()
+    ratio = models.ForeignKey(
+        Ratio,
+        on_delete=models.CASCADE,
+        related_name = 'images',
+        null=False
+    )
     uploaded_at = models.DateTimeField(default=now)
     tags = models.ManyToManyField(
         Tag,
