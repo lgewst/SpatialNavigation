@@ -1,0 +1,9 @@
+# IDEs and editors
+/.idea
+*.sublime-workspace
+
+# pycache
+*.pyc
+
+# secret keys
+/server/server/secrets.py
