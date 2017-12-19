@@ -11,6 +11,7 @@
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script src="../js/myLittleSN.js"></script>
 	<script language="javascript" type="text/javascript">
 		$(function() {
@@ -43,37 +44,47 @@
         }
 	</script>
 	<script type="text/javascript">
-		function uploadFile() {
-			var httpRequest;
-			document.getElementById("submit").onclick = function() {makeRequest('')}
-			var imgFile = $('#file').files[0];
-			var width = $('#file').width();
-			var height = $('#file').height();
-			var elem = $('#tags').value;
-			var tags = jquery.makeArray(elem);
-			var formData = new formData();
-			formData.append("imageFile", imgFile);
-			formData.append("width", width);
-			formData.append("height", height);
-			formData.append("tagArray", tags);
-			$.ajax ({
-				url: "http://picturesque.ga/api/save_image",
-				type: "POST",
-				data: formData,
-				processData: false,
-				contentType: false,
-				success: function(response) {
-					;
-				}
-			});
-		}
-	</script>
+	    $(document).ready(function () {
+			$("#upload").click(function() {
+				var width = 0, height = 0;
 
-	<script type="text/javascript">
-		(function() {
-			var httpRequest;
-			documents.getElementById()
-		})
+				var image = $('#file')[0].files[0];
+				var img = new Image();
+				img.onload = function() {
+					width = this.width;
+					height = this.height;
+
+				var tags = $("#tag0").val() + ' ' +
+						   $("#tag1").val() + ' ' +
+						   $("#tag2").val() + ' ' +
+						   $("#tag3").val() + ' ' +
+						   $("#tag4").val() + ' ' +
+						   $("#tag5").val();
+				
+				var formData = new FormData();
+				formData.append("image", image);
+				formData.append("width", width);
+				formData.append("height", height); 
+				formData.append("tags", tags);
+
+				$.ajax ({
+					url: "http://picturesque.ga/api/save_image",
+					type: "POST",
+					data: formData,
+					enctype: 'multipart/form-data',
+					processData: false,
+					contentType: false,
+					success: function(response) {
+						window.location.href = "https://s3.ap-northeast-2.amazonaws.com/picturesqueimages/front/html/upload_success.html";
+					},
+					error: function(response) {
+						alert("upload error!");
+					}
+				});
+				};
+				img.src = window.URL.createObjectURL(image);
+			});
+		});
 	</script>
 
 </head>
@@ -90,7 +101,7 @@
 			<!-- <h5>Use the button below to open an image that's on your computer.</h5> -->
 			<form method="post" enctype="multipart/form-data">
 				<div>
-					<input type="file" onchange="readURL(this);" id='file' name='file' style="display: none;">
+					<input type="file" onchange="readURL(this);" id="file" name="file" style="display: none;">
 					<button id="btn-upload" class="pink"><strong>select</strong></button>
 				</div>
 
@@ -101,15 +112,15 @@
 					<i class="fa fa-hashtag" style="position: absolute; top: 142px; left: 134px; color: #F67280"></i>
 					<i class="fa fa-hashtag" style="position: absolute; top: 202px; left: -12px; color: #F67280"></i>
 					<i class="fa fa-hashtag" style="position: absolute; top: 202px; left: 134px; color: #F67280"></i>
-					<input name="tags" type="text" class="tagbox" placeholder=" add">
-					<input name="tags" type="text" class="tagbox" placeholder=" tags">
-					<input name="tags" type="text" class="tagbox" placeholder=" that">
-					<input name="tags" type="text" class="tagbox" placeholder=" describes">
-					<input name="tags" type="text" class="tagbox" placeholder=" your">
-					<input name="tags" type="text" class="tagbox" placeholder=" image">
+					<input id="tag0" type="text" class="tagbox" placeholder=" add">
+					<input id="tag1" type="text" class="tagbox" placeholder=" tags">
+					<input id="tag2" type="text" class="tagbox" placeholder=" that">
+					<input id="tag3" type="text" class="tagbox" placeholder=" describes">
+					<input id="tag4" type="text" class="tagbox" placeholder=" your">
+					<input id="tag5" type="text" class="tagbox" placeholder=" image">
 				</div>
 				<div>
-					<button class="pink" id="submit" type="submit" onclick="location.href='https://s3.ap-northeast-2.amazonaws.com/picturesqueimages/front/html/upload_success.html'; return false;"><strong>submit</strong></button>
+					<button class="pink" id="upload" type="button";><strong>submit</strong></button>
 					<button class="white" onclick="javascript:history.back()"><strong>cancel</strong></button>
 				</div>
 			</form>
