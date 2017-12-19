@@ -1,7 +1,7 @@
 $(function() {
 	var rect = {width: 0, height: 1};
 	var pos = {y: 0, x: 1};
-	var candidates = [[10, 10]];
+	var candidates = [[5, 5]];
 	var block = [];
 	var cnt = 0;
 	var sectionWidth = $(window).width() * 0.7;
