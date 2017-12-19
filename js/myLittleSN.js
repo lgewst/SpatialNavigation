@@ -5,6 +5,9 @@ var configuration = {
     // define scope decidable element
     scopeDecidableElements: [], // "div"
 
+    // element that cannot cross the boundary
+    insuperableScopeElements: [],
+
 		// this value determine gradient of diagonal
 		// range : 0 ~ 0.5 
 		diagonalGradientRatio: 0.2,
@@ -73,14 +76,6 @@ $(function() {
     }); 
 
     return getAllElemPosInfos(candidates);
-
-    /*var candidates = [];
-
-    $.each(configuration.focusableElements, function(index, element) {
-      candidates = $.merge(candidates, $(document.activeElement).siblings(element + ":not(:focus)"));
-    }); 
-
-    return getAllElemPosInfos(candidates); */
   }
 
   // get position information of all candidates
@@ -235,13 +230,22 @@ $(function() {
 	function moveFocus() {
     if(!moveFocusInScope()) {
     	if(!moveFocusOutOfScope()) {
-    		return moveFocusByLoop();
+    		return moveFocusByLoop(true);
     	}
     }
 	}
 
 	// move focus only in scope
   function moveFocusInScope() {
+  	var isSuperable = true;
+
+  	for(var i=0; i<configuration.insuperableScopeElements.length; i++) {
+    	if($.contains($(configuration.insuperableScopeElements[i]).get(0), document.activeElement)) {
+    		isSuperable = false;
+    		break;
+    	}
+    }
+
     var candidates = getCandidatesInScope();
     focusedElem = getFocusedElem();
     
@@ -252,13 +256,17 @@ $(function() {
     if(candidates.length) {
       candidates[0].raw.focus();
       return true;
+    } else if(!isSuperable){
+    	moveFocusByLoop(isSuperable);
+
+    	return true;
     }
 
     return false;
   }
 
   // move focus regardless of scope
-   function moveFocusOutOfScope() {
+  function moveFocusOutOfScope() {
     var candidates = getAllCandidates();
     focusedElem = getFocusedElem();
     
@@ -276,7 +284,7 @@ $(function() {
   }
 
   // move focus by loop
-  function moveFocusByLoop() {
+  function moveFocusByLoop(isSuperable) {
   	var candidates;
 
   	// case of right
@@ -284,7 +292,7 @@ $(function() {
   		// focus move to down stair
   		direction = fourWayKey.down;
 
-  		candidates = getCandidates();
+  		candidates = isSuperable ? getCandidates() : getCandidatesInScope();
   		candidates = filterCandidates(candidates);
   		$(getMostLeftElem(candidates).raw).focus();
 
@@ -296,7 +304,7 @@ $(function() {
   		// focus move to up stair
   		direction = fourWayKey.up;
 
-  		candidates = getCandidates();
+  		candidates = isSuperable ? getCandidates() : getCandidatesInScope();
   		candidates = filterCandidates(candidates);
   		$(getMostRightElem(candidates).raw).focus();
 
