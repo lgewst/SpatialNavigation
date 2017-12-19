@@ -5,32 +5,20 @@ from django.utils.timezone import now
 from django.contrib.auth.models import User
 from django.core.files.storage import default_storage
 
-
 from .models import *
 
 # Create your views here.
 def index(request):
     return HttpResponse("Hello World! Welcome to picturesque.")
 
-def get_image(request, tag, size):
+def get_image(request, size, tag):
     if request.method == 'GET':
-        image_id = int(id)
-        try:
-            image = Image.objects.get(id=image_id)
-
-            image_dict = {}
-            image_dict['image_url'] = default_storage.url(image.url)
-
-            tags = []
-            for tag in image.tags.all():
-                tags.append(tag.name)
-
-            image_dict['tags'] = tags
-            return JsonResponse(image_dict)
-        except Image.DoesNotExist:
-            return HttpResponseNotFound()
+        return HttpResponse('tag: ' + tag + ', size: ' + size)
     else:
         return HttpResponseNotAllowed(['GET'])
+
+def get_image_error(request, size, tag):
+    return HttpResponseNotFound()
 
 def detail_image(request, id):
     if request.method == 'GET':
@@ -67,7 +55,7 @@ def save_image(request):
         uploaded_time = uploaded_at.strftime("%Y%m%d%H%M%S")
         image_type = image.name.split('.')[-1]
         image_url = default_storage.save('images/' + uploader.username + '/' + uploaded_time + '.' + image_type, image)
-        ratio = get_ratio(width, height)
+        ratio = get_ratio(int(width), int(height))
         image_model = Image(uploader=uploader, url=image_url, width=width, height=height, uploaded_at=uploaded_at, ratio=ratio)
         image_model.save()
 
@@ -117,5 +105,5 @@ def get_ratio(width, height):
     else:
         key = 4.00
 
-    return Ratio.objest.get(value=key)
+    return Ratio.objects.get(value=key)
 
