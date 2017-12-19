@@ -4,15 +4,7 @@
 	<title>Login</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-	<!-- <div id="fb-root"></div> -->
-	<!-- <script>(function(d, s, id) {
-	  var js, fjs = d.getElementsByTagName(s)[0];
-	  if (d.getElementById(id)) return;
-	  js = d.createElement(s); js.id = id;
-	  js.src = 'https://connect.facebook.net/ko_KR/sdk.js#xfbml=1&version=v2.11';
-	  fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));</script> -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="../css/main.css">
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -21,11 +13,33 @@
 <body>
 
 	<div class="content">
-		<div class="logo"><a href="javascript:void(0);" onclick="location.href='#'; return false;"><img src="./images/logo.png" style="width:40%"></a></div>
+		<div class="logo"><a href="javascript:void(0);" onclick="location.href='file:///C:/Users/KN7/Documents/2017%20%EA%B0%80%EC%9D%84%ED%95%99%EA%B8%B0/%EC%B0%BD%EC%9D%98%EC%A0%81%ED%86%B5%ED%95%A9%EC%84%A4%EA%B3%84/Skeleton/html/index.html'; return false;"><img src="./images/logo.png" style="width:40%"></a></div>
 		<h3>
 			Want your own album? It's so easy to start!
 		</h3>
-		<!-- <div class="fb-login-button" data-max-rows="1" data-size="large" data-button-type="login_with" data-show-faces="false" data-auto-logout-link="true" data-use-continue-as="false"></div> -->
+
+		<div style="text-align:center; padding:1em">
+			<div>
+				<button class="btn-si btn-google" onclick="window.location='http://picturesque.ga/social/login/google-oauth2/';">
+					<i class="fa fa-google-plus" style="font-size: 25px; position: relative; left: -30px"></i>
+	        		Sign in with Google
+	        	</button>
+	        </div>
+	        <div>
+	        	<button class="btn-si btn-facebook" onclick="window.location='http://picturesque.ga/social/login/facebook/';">
+	        		<i class="fa fa-facebook" style="font-size: 25px; position: relative; left: -30px"></i>
+					Sign in with Facebook
+				</button>
+	        </div>
+			<div>
+				<button class="btn-si btn-twitter" onclick="window.location='http://picturesque.ga/social/login/twitter/';">
+					<i class="fa fa-twitter" style="font-size: 25px; position: relative; left: -30px"></i>
+					Sign in with Twitter
+				</button>
+			</div>
+
+		</div>
+
 	</div>
 	
 </body>

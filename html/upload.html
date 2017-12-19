@@ -10,6 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="../css/main.css">
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
 	<script src="../js/myLittleSN.js"></script>
 	<script language="javascript" type="text/javascript">
 		$(function() {
@@ -41,37 +42,61 @@
             }
         }
 	</script>
+	<script type="text/javascript">
+		function uploadFile() {
+			var imgFile = $('#file').files[0];
+			var formData = new formData();
+			formData.append("fileToUpload", imgFile);
+			$.ajax ({
+				url: "",
+				type: "POST",
+				data: formData,
+				processData: false,
+				contentType: false,
+				success: function(response) {
+
+				}
+			});
+		}
+	</script>
+
 </head>
 <body>
 
 	<div class="content" style="display: flex; width: 85%">
 		<div class="logo" style="flex: 6; position: relative; left: 50px;">
-			<a href="javascript:void(0);" onclick="location.href='#'; return false;"><img src="./images/logo.png" style="width:60%"></a>
+			<a href="javascript:void(0);" onclick="location.href='file:///C:/Users/KN7/Documents/2017%20%EA%B0%80%EC%9D%84%ED%95%99%EA%B8%B0/%EC%B0%BD%EC%9D%98%EC%A0%81%ED%86%B5%ED%95%A9%EC%84%A4%EA%B3%84/Skeleton/html/index.html'; return false;"><img src="./images/logo.png" style="width:60%"></a>
 			<br>
 			<img id="preview" style="max-width: 400px; max-height: 250px;">
 		</div>
 		<div class="verline"></div>
-		<div style="flex: 4; position: relative; top: 137px; left: 20px;">
+		<div style="flex: 4; position: relative; top: 200px; left: 20px; height: 200px">
 			<!-- <h5>Use the button below to open an image that's on your computer.</h5> -->
-			<input type="file" onchange="readURL(this);" id='file' name='file' style="display: none;">
-			<button id="btn-upload" class="pink"><strong>select</strong></button>
-
-			
-
-			<div style="position: relative; top: 17px;">
-				<div>
-				<i class="fa fa-hashtag" style="position: absolute; top: 20px; left: -20px; color: #F67280"></i>
-				<input type="text" class="tagbox" placeholder=" add tags">
-				</div>
-				
+			<div>
+				<input type="file" onchange="readURL(this);" id='file' name='file' style="display: none;">
+				<button id="btn-upload" class="pink"><strong>select</strong></button>
 			</div>
 
-			<div style="position: relative; top: 147px; height: 50px">
-			<button class="pink" onclick="location.href='#'; return false;"><strong>submit</strong></button>
-			<button class="white" onclick="javascript:history.back()"><strong>cancel</strong></button>	
+			<div>
+				<i class="fa fa-hashtag" style="position: absolute; top: 82px; left: -12px; color: #F67280"></i>
+				<i class="fa fa-hashtag" style="position: absolute; top: 82px; left: 134px; color: #F67280"></i>
+				<i class="fa fa-hashtag" style="position: absolute; top: 142px; left: -12px; color: #F67280"></i>
+				<i class="fa fa-hashtag" style="position: absolute; top: 142px; left: 134px; color: #F67280"></i>
+				<i class="fa fa-hashtag" style="position: absolute; top: 202px; left: -12px; color: #F67280"></i>
+				<i class="fa fa-hashtag" style="position: absolute; top: 202px; left: 134px; color: #F67280"></i>
+				<input type="text" class="tagbox" placeholder=" add">
+				<input type="text" class="tagbox" placeholder=" tags">
+				<input type="text" class="tagbox" placeholder=" that">
+				<input type="text" class="tagbox" placeholder=" describes">
+				<input type="text" class="tagbox" placeholder=" your">
+				<input type="text" class="tagbox" placeholder=" image">
 			</div>
-			
+			<div>
+				<button class="pink" onclick="location.href='file:///C:/Users/KN7/Documents/2017%20%EA%B0%80%EC%9D%84%ED%95%99%EA%B8%B0/%EC%B0%BD%EC%9D%98%EC%A0%81%ED%86%B5%ED%95%A9%EC%84%A4%EA%B3%84/Skeleton/html/upload_success.html'; return false;"><strong>submit</strong></button>
+				<button class="white" onclick="javascript:history.back()"><strong>cancel</strong></button>
+			</div>
 		</div>
+
 	</div>
 
 </body>

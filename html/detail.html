@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>detail</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="../css/main.css">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="../js/myLittleSN.js"></script>
+	<script type="text/javascript"> // for pop-up layer
+	    function wrapWindowByMask(){
+	        var maskHeight = $(document).height();
+	        var maskWidth = $(window).width();
+	        $('.mask').css({'width':maskWidth,'height':maskHeight});
+	        $('.mask').fadeTo("slow", 0.5);
+
+	        var left = ( $(window).scrollLeft() + ( $(window).width() - $('.window').width()) / 2 );
+	        var top = ( $(window).scrollTop() + ( $(window).height() - $('.window').height()) / 2 );
+	 
+	        $('.window').css({'left':left,'top':top, 'position':'absolute'});
+	 
+	        $('.window').show();	        
+	    }
+	 
+	    $(document).ready(function(){
+	        $('.showMask').click(function(e){
+	            e.preventDefault();
+	            wrapWindowByMask();
+	        });
+
+	        $('.window .close').click(function (e) {
+	            e.preventDefault();
+	            $('.mask, .window').hide();
+	        });
+	 
+	        $('.mask').click(function () {
+	            $(this).hide();
+	            $('.window').hide();
+	        });
+	    });
+	</script>
+</head>
+<body>
+
+		<div>
+			<div style="text-align: center; margin-top: 30px">
+				<a href="#" class="showMask"><img src="./images/main.png" style="width: 80%;"></a>
+			</div>
+			
+		    <div class="mask"></div>
+		    
+		    <div class="window">
+		    	<button hrep="#" class="close"><i class="fa fa-close"></i></button>
+		    	<div style="text-align: center;"><img src="./images/kid.jpg" style="max-width: 1000px; max-height: 600px"></div>
+		    </div>
+		</div>
+		<br>
+	
+</body>
+</html>
