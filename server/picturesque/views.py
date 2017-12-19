@@ -2,6 +2,8 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.core.files.storage import default_storage
 from django.utils.timezone import now
+from django.contrib.auth.models import User
+
 from .models import *
 
 # Create your views here.
@@ -17,6 +19,8 @@ def save_image(request):
 
     if request.method == 'POST' and image is not None and tags is not None:
         uploader = request.user
+        if uploader.is_anonymous():
+            uploader = User.objects.get(id=2) # no_login
         uploaded_at = now()
         uploaded_time = uploaded_at.strftime("%Y%m%d%H%M%S")
         image_type = image.name.split('.')[-1]
@@ -36,4 +40,5 @@ def save_image(request):
         return render(request, 'upload.html', {
             'message': 'upload success!'
         })
+
     return render(request, 'upload.html')
