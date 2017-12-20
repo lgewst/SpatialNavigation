@@ -38,9 +38,15 @@ def get_image(request, size, tag):
                 image_json['image_url'] = default_storage.url('images/' + size.replace(':', 'x') + '.jpg')
                 image_json['id'] = 0
             else:
-                image = random.choice(list(images.all().values()))
-                image_json['image_url'] = default_storage.url(image['url'])
-                image_json['id'] = image['id']
+                pick = random.choice(list(images.all().values()))
+                try:
+                    image = Image.objects.get(id=pick['id'])
+                    image_json['image_url'] = default_storage.url(image.url)
+                    image_json['id'] = image.id
+                    if tag == '':
+                        image_json['tag'] = list(image.tags.all().values())[0]['name']
+                except Image.DoesNotExist:
+                    return HttpResponseNotFound()
             return JsonResponse(image_json)        
         except (Ratio.DoesNotExist, Tag.DoesNotExist):
             return HttpResponseNotFound()
