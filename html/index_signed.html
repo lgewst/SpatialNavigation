@@ -8,45 +8,15 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" type="text/css" href="../css/main.css">
-
+	<!--link rel="stylesheet" type="text/css" href="../css/arrangeTest.css"-->
+	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script type="text/javascript">
-		configuration.focusableElements = ["button", "input", "a"];
-    	configuration.scopeDecidableElements = [".main", ".content", ".pictures"];
-	</script>
 	<script src="../js/myLittleSN.js"></script>
-	<!-- <script type="text/javascript"> // for pop-up layer
-	    function wrapWindowByMask(){
-	        var maskHeight = $(document).height();
-	        var maskWidth = $(window).width();
-	        $('.mask').css({'width':maskWidth,'height':maskHeight});
-	        $('.mask').fadeTo("slow", 0.5);
-
-	        var left = ( $(window).scrollLeft() + ( $(window).width() - $('.window').width()) / 2 );
-	        var top = ( $(window).scrollTop() + ( $(window).height() - $('.window').height()) / 2 );
-
-	        $('.window').css({'left':left,'top':top, 'position':'absolute'});
-
-	        $('.window').show();
-	    }
-
-	    $(document).ready(function(){
-	        $('.showMask').click(function(e){
-	            e.preventDefault();
-	            wrapWindowByMask();
-	        });
-
-	        $('.window .close').click(function (e) {
-	            e.preventDefault();
-	            $('.mask, .window').hide();
-	        });
-
-	        $('.mask').click(function () {
-	            $(this).hide();
-	            $('.window').hide();
-	        });
-	    });
-	</script> -->
+	<script src="../js/myLittleArrangement.js"></script>
+	<script type="text/javascript">
+		configuration.focusableElements = ["button", "input", "a", ".basic"];
+    configuration.scopeDecidableElements = [".main", ".content", ".pictures"];
+	</script>
 </head>
 <body>
 
@@ -75,28 +45,18 @@
 				</div>
 			</div>
 		<br>
-			<div>
-				<div class="pictures">
+			<div class="pictures">
+				<div>
 				    <button class="icon" style="position: absolute; left: 20px; top: 550px;">
 				    	<i class="fa fa-caret-left" style="font-size:60px; color: #F67280"></i>
 				    </button>
 				</div>
-				<div style="text-align: center;">
-					<div class="container"></div>
-					<a href="#" class="showMask"><img src="./images/main.png" style="width: 80%;"></a>
-				</div>
+				<div id="container"></div>
 				<div>
 					<button class="icon" style="position: absolute; right: 20px; top: 550px;">
 				    	<i class="fa fa-caret-right" style="font-size:60px; color: #F67280"></i>
 				    </button>
 				</div>
-
-			    <!-- <div class="mask"></div>
-
-			    <div class="window">
-			    	<button hrep="#" class="close"><i class="fa fa-close"></i></button>
-			    	<img src="./images/kid.jpg" style="width: 100%">
-			    </div> -->
 			</div>
 		</div>
 		<br>
