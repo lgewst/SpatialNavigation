@@ -269,3 +269,16 @@ a:focus {
     background-color: #21c2ff; }
   .btn-twitter:active {
     background-color: #0087ba; }
+
+.detailtag {
+  margin: 0px;
+  width: 120px;
+  height: 60px;
+  border-radius: 0.5em;
+  border-style: none;
+  background-color: rgba(0, 0, 0, 0);
+  color: black;
+  text-align: center;
+  vertical-align: middle;
+  font-size: 15px;
+}

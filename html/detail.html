@@ -10,26 +10,28 @@
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="../js/myLittleSN.js"></script>
-	<!-- <script type="text/javascript">
-		$(document).ready(function() {
-			var image_url;
-			var tags;
-			var tagarray;
+    <script src="../js/myLittleArrangement.js"></script>
+	<script type="text/javascript">
+       	function() {
+            var url = ;
 			$.ajax ({
-				type: "get",
-				url: ,
-				data: {"image_url":"image_url", "tags":"tags"},
+				type: "GET",
+				url: url,
 				dataType: json,
-				success: function() {
-
+				success: function(response) {
+                    var json = $.parseJSON(response);
+                    var url = json.image_url;
+                    var tags = json.tags;
+                    $("#container").append("<img src=\"" + url + "\" style=\"max-width:1500px; max-height:1000px;\">");
+                    for(var i=0; i<tags.length; i++)
+                        $("#tags").append("<button class=\"detailtag\">" + tags[i] + "</button>"
 				},
 				error: function() {
 					alert("error")
 				}
-			});
-			tagarray = JSON.parse(tags);
-		});
-	</script> -->
+            });
+		};
+	</script>
 
 </head>
 <body>
@@ -38,13 +40,12 @@
 			<div class="mask"></div>
 			
 		    <div class="window">
-				<button hrep="#" class="close" style="position: absolute; top: 15px; right: 30px"><i class="fa fa-close"></i></button>	
-		    	<img src="./images/1.jpg" style="max-width: 1500px; max-height: 1000px">
-		    </div>
+				<button hrep="#" class="close" style="position: absolute; top: 15px; right: 30px" onclick="javascript:history.back()"><i class="fa fa-close"></i></button>	
+		        <div id="container"></div>
+
+            </div>
 		    <div class="shadow">
-		    	<div style="width: 70%;">
-		    		
-		    	</div>
+		    	<div id="tags" style="width: 70%;"></div>
 		    </div>
 		</div>
 	
