@@ -1,6 +1,6 @@
 var rect = {width: 0, height: 1};
 var pos = {y: 0, x: 1};
-var candidates = [[5, 5]];
+var candidates = [[10, 10]];
 var block = [];
 var cnt = 0;
 var sectionWidth = $(window).width() * 0.7;
@@ -11,9 +11,9 @@ var sectionHeight = basicElementSide * 6;
 
 var containerPosInfo;
 
-function imageMaker(width, height, top, left) {
-	$("#container").append("<img id=\"img" + cnt + "\"src=\"img/forbidden.jpg\" class=\"basic\" tabindex=\"-1\" style=\"position: absoulte; top:" + top + "px; left:" + left
-		+ "px; width:" + width * basicElementSide + "px; height:"  + height * basicElementSide + "px;\">");
+function imageMaker(width, height, top, left, src) {
+	$("#container").append("<img id=\"img" + cnt + "\" src=\"" + src + "\" class=\"basic\" tabindex=\"-1\" style=\"position: absoulte; top:" + top + "px; left:" + left
+		+ "px; width:" + width * basicElementSide + "px; height:"  + height * basicElementSide + "px; padding: 10px;\">");
 }
 
 function randomRatioGeneration(widthMaxRatio, heightMaxRatio) {
@@ -108,7 +108,33 @@ function nyopnyop() {
 		var maxRatio = estimateMaxRatio(arrangementPos);
 		var ratios = randomRatioGeneration(maxRatio[rect.width], maxRatio[rect.height]);
 
-		imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x]);
+		//imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x]);
+/////////////////////////////////////////////////////////////////////////////////////////		
+		var url = function() {
+		$.ajax ({
+			url: "http://picturesque.ga/api/get_image/" + ratios[rect.width] + ":" + ratios[rect.height] + "/cartoon",
+			type: "GET",
+			dataType: 'json',
+			processData: false,
+			contentType: false,
+			async: false,
+			success: function(response) {
+				//alert("success : ");
+				$.each( response, function( key, val ) {
+    			console.log(key + " : " + val + "\n");
+    			if(key == "image_url") {
+    				imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], val);
+    			}
+  			});			
+			},
+			error: function(response) {
+				alert("post error");
+			}
+		});
+		}
+		var temp = url();
+////////////////////////////////////////////////////////////////////////////////////
+
 		var imgPosInfo = $("#img" + cnt).get(0).getBoundingClientRect();
 
 		if(basicElementSide < containerPosInfo.bottom - imgPosInfo.bottom) {
@@ -142,47 +168,24 @@ function nyopnyop() {
 
 $(function() {
 	$("#container").css({"width" : sectionWidth + 15 + "px", "height" : sectionHeight + 15 + "px", "background-color" : "#fff", "margin" : "0 auto"});
-  containerPosInfo = $("#container").get(0).getBoundingClientRect();
-	// nyopnyop();
+	containerPosInfo = $("#container").get(0).getBoundingClientRect();
+	nyopnyop();
 
-	// TODO : randomRatioGeneration(4, 4);
-	$(document).ready(
-		var url = function() {
-			var width = ;
-			var height = ;
+	//var temp = randomRatioGeneration(4, 4);
+	//var src;
 
-			var data = "http://picturesque.ga/api/get_image/" + width + ":" + height + "/";
+	//var url = function() {
+		//var width = temp[rect.width];
+		//var height = temp[rect.height];
 
-			$.ajax ({
-				url: data,
-				type: "POST",
-				data: data,
-				processData: false,
-				contentType: false,
-				success: function(response) {
-					alert("success");
-				},
-				error: function(response) {
-					alert("post error");
-				}
-			});
-			return data;
-		};
-		function() {
-			var id, image_url;
-			$.ajax ({
-				url: url,
-				type: "GET",
-				data: {"id":"id", "image_url":"image_url"},
-				dataType: 'json',
-				processData: false,
-				contentType: false,
-				success: function(json) {
-					alert("success");
-				},
-				error: function(response) {
-					alert("get error");
-				}
-			});
-		};);
-	}); 
+		//var data = "http://picturesque.ga/api/get_image/" + "1" + ":" + "1" + "/";
+
+
+	//}
+
+	//src = url();
+
+	//console.log("haha : " + src);
+	
+	// imageMaker(basicElementSide, basicElementSide, 10, 10, "https://picturesqueimages.s3.amazonaws.com/media/images/no_login/20171219195815.jpg");
+}); 
