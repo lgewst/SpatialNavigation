@@ -14,12 +14,14 @@ def index(request):
     return HttpResponse("Hello World! Welcome to picturesque.")
 
 def get_image(request, size, tag):
-    if (size == '2:2' or '3:3' or '4:4'):
+    if (size == '2:2' or size == '3:3' or size == '4:4'):
         size = '1:1'
     elif (size == '2:4'):
         size = '1:2'
     elif (size == '4:2'):
         size = '2:1'
+
+    print(size)
 
     if request.method == 'GET':
         try:
@@ -29,15 +31,17 @@ def get_image(request, size, tag):
                 maintag = Tag.objects.get(name=tag)
                 images = images.filter(tags=maintag)
 
-            if (len(list(images.all().values())) == 0):
-                return HttpResponseNotFound()
-
-            image = random.choice(list(images.all().values()))
-
             image_json = {}
-            image_json['image_url'] = default_storage.url(image['url'])
-            image_json['id'] = image['id']
-            return JsonResponse(image_json)
+            length = len(list(images.all().values()))
+            print(length)
+            if (length == 0):
+                image_json['image_url'] = default_storage.url('images/' + size.replace(':', 'x') + '.jpg')
+                image_json['id'] = 0
+            else:
+                image = random.choice(list(images.all().values()))
+                image_json['image_url'] = default_storage.url(image['url'])
+                image_json['id'] = image['id']
+            return JsonResponse(image_json)        
         except (Ratio.DoesNotExist, Tag.DoesNotExist):
             return HttpResponseNotFound()
     else:
