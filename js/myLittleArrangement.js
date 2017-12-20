@@ -1,19 +1,19 @@
 var rect = {width: 0, height: 1};
 var pos = {y: 0, x: 1};
-var candidates = [[10, 10]];
+var candidates = [[5, 5]];
 var block = [];
 var cnt = 0;
 var sectionWidth = $(window).width() * 0.7;
 
 var basicElementSideRatio = 0.125;
 var basicElementSide = Math.round(sectionWidth * basicElementSideRatio);
-var sectionHeight = basicElementSide * 6;
+var sectionHeight = basicElementSide * 5;
 
 var containerPosInfo;
 
 function imageMaker(width, height, top, left, src) {
 	$("#container").append("<img id=\"img" + cnt + "\" src=\"" + src + "\" class=\"basic\" tabindex=\"-1\" style=\"position: absoulte; top:" + top + "px; left:" + left
-		+ "px; width:" + width * basicElementSide + "px; height:"  + height * basicElementSide + "px; padding: 10px;\">");
+		+ "px; width:" + width * basicElementSide + "px; height:"  + height * basicElementSide + "px; padding: 5px;\">");
 }
 
 function randomRatioGeneration(widthMaxRatio, heightMaxRatio) {
@@ -103,7 +103,7 @@ function nyopnyop() {
 		do {
 			if(candidates.length == 0) { return }
 				arrangementPos = candidates.shift();
-		} while ($(myElementFromPoint(arrangementPos[pos.x] + containerPosInfo.left + 15, arrangementPos[pos.y] + containerPosInfo.top + 15)).is("img"))
+		} while ($(myElementFromPoint(arrangementPos[pos.x] + containerPosInfo.left + 10, arrangementPos[pos.y] + containerPosInfo.top + 10)).is("img"))
 
 		var maxRatio = estimateMaxRatio(arrangementPos);
 		var ratios = randomRatioGeneration(maxRatio[rect.width], maxRatio[rect.height]);
@@ -112,7 +112,7 @@ function nyopnyop() {
 /////////////////////////////////////////////////////////////////////////////////////////		
 		var url = function() {
 		$.ajax ({
-			url: "http://picturesque.ga/api/get_image/" + ratios[rect.width] + ":" + ratios[rect.height] + "/cartoon",
+			url: "http://picturesque.ga/api/get_image/" + ratios[rect.width] + ":" + ratios[rect.height] + "/sky",
 			type: "GET",
 			dataType: 'json',
 			processData: false,
@@ -167,7 +167,7 @@ function nyopnyop() {
 
 
 $(function() {
-	$("#container").css({"width" : sectionWidth + 15 + "px", "height" : sectionHeight + 15 + "px", "background-color" : "#fff", "margin" : "0 auto"});
+	$("#container").css({"width" : sectionWidth + 10 + "px", "height" : sectionHeight + 10 + "px", "background-color" : "#fff", "margin" : "0 auto"});
 	containerPosInfo = $("#container").get(0).getBoundingClientRect();
 	nyopnyop();
 
