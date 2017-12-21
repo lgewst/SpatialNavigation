@@ -22,7 +22,8 @@ function imageMakerTag(width, height, top, left, src, id, link, string) {
 	$("#container").append("<a href=\"" + link + "\" id=\"img" + cnt + "\" class=\"basic\" tabindex=\"-1\" data-keboard=\"true\" data-target=\"#layerpop" + id + "\" data-toggle=\"modal\" style=\"position: absoulte; top:"
 	 												+ top + "px; left:" + left + "px; width:" + width * basicElementSide + "px; height:"  + height * basicElementSide + "px; padding: 5px; background: url(" + src 
 	 												+ ") no-repeat; background-size: cover; background-origin: content-box; background-clip: content-box;\">");
-    $("#container").append("<div><div class=\"modal fade\" id=\"layerpop" + id + "\"><div class=\"modal-dialog\"><div class=\"modal-content\"><button class=\"close\" data-dismiss=\"modal\"><i class=\"fa fa-close\"></i></button>								<img class=\"modal-image\" src=\"" + src + "\" style=\"text-align: center; position: relative;\"><div class=\"modal-footer\"><h4>" + string + "</h4></div></div></div></div></div>");
+    $("#container").append("<div><div class=\"modal fade\" id=\"layerpop" + id + "\"><div class=\"modal-dialog\"><div class=\"modal-content\"><button class=\"close\" data-dismiss=\"modal\"><i class=\"fa fa-close\"></i></button>"
+    	                     + "<img class=\"modal-image\" src=\"" + src + "\" style=\"text-align: center; position: relative;\"><div class=\"modal-footer\"><h4>" + string + "</h4></div></div></div></div></div>");
 }
 
 function randomRatioGeneration(widthMaxRatio, heightMaxRatio) {
@@ -70,33 +71,6 @@ function estimateMaxRatio(arrangementPos) {
 	return [widthMaxRatio1 > widthMaxRatio2 ? widthMaxRatio2 : widthMaxRatio1, heightMaxRatio];
 }
 
-function myElementFromPoint(x, y) {
-/*	var check=false, isRelative=true;
-	if(!document.elementFromPoint) return null;
-
-	if(!check)
-	{
-		var sl;
-		if((sl = $(document).scrollTop()) >0)
-		{
-			isRelative = (document.elementFromPoint(0, sl + $(window).height() -1) == null);
-		}
-		else if((sl = $(document).scrollLeft()) >0)
-		{
-			isRelative = (document.elementFromPoint(sl + $(window).width() -1, 0) == null);
-		}
-		check = (sl>0);
-	}
-
-	if(!isRelative)
-	{
-		x += $(document).scrollLeft();
-		y += $(document).scrollTop();
-	}*/
-
-	return document.elementFromPoint(x - window.pageXOffset, y + $(document).scrollTop());
-}
-
 function nyopnyop() {
 
 		console.log("start!!");
@@ -117,51 +91,48 @@ function nyopnyop() {
 			if(candidates.length == 0) { return }
 				arrangementPos = candidates.shift();
 				maxRatio = estimateMaxRatio(arrangementPos);
-		} while ($(myElementFromPoint(arrangementPos[pos.x] + containerPosInfo.left + 10, arrangementPos[pos.y] + containerPosInfo.top + 10)).is("a") || maxRatio[rect.width] == 0)
+		} while ($(document.elementFromPoint(arrangementPos[pos.x] + containerPosInfo.left + 10, arrangementPos[pos.y] + containerPosInfo.top + 10)).is("a") || maxRatio[rect.width] == 0)
 		
 		console.log(maxRatio[rect.width] + " : " + maxRatio[rect.height]);
 
 		var ratios = randomRatioGeneration(maxRatio[rect.width], maxRatio[rect.height]);
 
-		//imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x]);
-/////////////////////////////////////////////////////////////////////////////////////////
-
 		var url = function() {
 			var id, src;
-            var tag = new Array();
+			var tag = new Array();
 			var data = "http://picturesque.ga/api/";
-		$.ajax ({
-			url: data + "get_image/" + ratios[rect.width] + ":" + ratios[rect.height] + "/" + pageTag,
-			type: "GET",
-			dataType: 'json',
-			processData: false,
-			contentType: false,
-			async: false,
-			success: function(response) {
-				$.each( response, function( key, val ) {
-    			if(key == "tag") tag.push(val);
-    			if(key == "id") id = val;
-    			if(key == "image_url") src = val;
-  			});
+			$.ajax ({
+				url: data + "get_image/" + ratios[rect.width] + ":" + ratios[rect.height] + "/" + pageTag,
+				type: "GET",
+				dataType: 'json',
+				processData: false,
+				contentType: false,
+				async: false,
+				success: function(response) {
+					$.each( response, function( key, val ) {
+						if(key == "tag") tag.push(val);
+						if(key == "id") id = val;
+						if(key == "image_url") src = val;
+					});
 
-            var tag2string = tag.toString();
-            var tagArray = tag2string.split(",");
-            var string = "";
-            for(var i=0; i<tagArray.length; i++)
-                string += "#" + tagArray[i] + " ";
-		    if(getUrlParameter('tag') != null) {
-				imageMakerTag(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], src, id, "../html/tag_page.html?tag=" + tagArray[0], string);
-    		} else {
-    			imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], src, id, "../html/tag_page.html?tag=" + tagArray[0]);
-    		}			
-    	},
-			error: function(response) {
-				alert("post error");
-			}
-		});
+					var tag2string = tag.toString();
+					var tagArray = tag2string.split(",");
+					var string = "";
+					for(var i=0; i<tagArray.length; i++)
+						string += "#" + tagArray[i] + " ";
+					if(getUrlParameter('tag') != null) {
+						imageMakerTag(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], src, id, "../html/tag_page.html?tag=" + tagArray[0], string);
+					} else {
+						imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], src, id, "../html/tag_page.html?tag=" + tagArray[0]);
+					}			
+				},
+				error: function(response) {
+					alert("post error");
+				}
+			});
 		}
+
 		var temp = url();
-////////////////////////////////////////////////////////////////////////////////////
 		var imgPosInfo = $("#img" + cnt).get(0).getBoundingClientRect();
 
 		if(basicElementSide < containerPosInfo.bottom - imgPosInfo.bottom) {
@@ -205,16 +176,17 @@ function getUrlParameter(sParam) {
 			return sParameterName[1] === undefined ? true : sParameterName[1];
 		}
 	}
-};
+}
 
 $(function() {
 	$("#container").css({"width" : sectionWidth + 13 + "px", "height" : sectionHeight + 10 + "px", "background-color" : "#fff", "margin" : "0 auto"});
 	containerPosInfo = $("#container").get(0).getBoundingClientRect();
-
-
-
-
 	nyopnyop();
+
+	if(getUrlParameter('tag')) {
+		pageTag = getUrlParameter('tag');
+		$("button.tag").text("#" + pageTag).css({ 'font-weight': 'bold' })
+	}
 
 	//$("a:focus").css({"outline-clolr" : "#F8B195", "outline-style" : "dashed", "outline-width" : "4px"});
 
