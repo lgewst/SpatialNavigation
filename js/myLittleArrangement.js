@@ -21,6 +21,12 @@ function imageMaker(width, height, top, left, src, id, link) {
 	 												//+ top + "px; left:" + left + "px; width:" + width * basicElementSide + "px; height:"  + height * basicElementSide + "px; padding: 5px;\">" + "</a>");
 }
 
+function imageMakerTag(width, height, top, left, src, id, link) {
+	$("#container").append("<a href=\"" + link + "\" id=\"img" + cnt + "\" class=\"basic\" tabindex=\"-1\" data-keboard=\"true\" data-target=\"#layerpop\" data-toggle=\"modal\" style=\"position: absoulte; top:"
+	 												+ top + "px; left:" + left + "px; width:" + width * basicElementSide + "px; height:"  + height * basicElementSide + "px; padding: 5px; background: url(" + src 
+	 												+ ") no-repeat; background-size: cover; background-origin: content-box; background-clip: content-box;\">");
+}
+
 function randomRatioGeneration(widthMaxRatio, heightMaxRatio) {
 	var widthRatio = Math.floor(Math.random() * widthMaxRatio) + 1;
 	var heightRatio;
@@ -142,7 +148,7 @@ function nyopnyop() {
   			});
 
 		    if(tag) {
-				imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], src, id, "../html/tag_page.html?tag=" + tag);
+				imageMakerTag(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], src, id, "../html/tag_page.html?tag=" + tag);
                 var tag2string = "";
                 for(var i=0; i<tag.length; i++)
                     tag2string += "#" + tag[i] + " ";
