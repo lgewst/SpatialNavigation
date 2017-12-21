@@ -3,7 +3,6 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^detail/(?P<id>[0-9]+)$', views.detail_image, name='detail'),
     url(r'^get_image/(?P<size>[1-4]:[1-4])/(?P<tag>.*)$', views.get_image, name='get_image'),
     url(r'^get_image/(?P<size>((?![1-4]:[1-4]).)*)/(?P<tag>.*)$', views.get_image_error,
         name='get_image_error'),

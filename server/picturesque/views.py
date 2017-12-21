@@ -45,6 +45,12 @@ def get_image(request, size, tag):
                     image_json['id'] = image.id
                     if tag == '':
                         image_json['tag'] = list(image.tags.all().values())[0]['name']
+                    else:
+                        tags = []
+                        for tag in image.tags.all():
+                            tags.append(tag.name)
+
+                        image_json['tag'] = tags
                 except Image.DoesNotExist:
                     return HttpResponseNotFound()
             return JsonResponse(image_json)        
@@ -55,26 +61,6 @@ def get_image(request, size, tag):
 
 def get_image_error(request, size, tag):
     return HttpResponse(status=204)
-
-def detail_image(request, id):
-    if request.method == 'GET':
-        image_id = int(id)
-        try:
-            image = Image.objects.get(id=image_id)
-
-            image_json = {}
-            image_json['image_url'] = default_storage.url(image.url)
-
-            tags = []
-            for tag in image.tags.all():
-                tags.append(tag.name)
-
-            image_json['tags'] = tags
-            return JsonResponse(image_json)
-        except Image.DoesNotExist:
-            return HttpResponseNotFound()
-    else:
-        return HttpResponseNotAllowed(['GET'])
 
 def save_image(request):
     # get files from request.FILES - https://docs.djangoproject.com/en/1.11/topics/http/file-uploads/
@@ -102,17 +88,12 @@ def save_image(request):
             try:
                 image_model.tags.add(Tag.objects.get(name=tag))
             except Tag.DoesNotExist:
-                image_model.tags.add(Tag.objects.create(name=tag))
+                if (tag!= ''):
+                    image_model.tags.add(Tag.objects.create(name=tag))
 
         image_model.save()
-        '''
-        return render(request, 'upload.html', {
-            'message': 'upload success!'
-        })
-        '''
         return HttpResponse('Upload Success!')
-
-    return render(request, 'upload.html')
+    return render(request, 'upload.html') # for testing
 
 
 def get_ratio(width, height):
