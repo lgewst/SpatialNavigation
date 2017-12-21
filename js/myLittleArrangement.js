@@ -7,7 +7,7 @@ var sectionWidth = $(window).width() * 0.7;
 
 var basicElementSideRatio = 0.125;
 var basicElementSide = Math.round(sectionWidth * basicElementSideRatio);
-var sectionHeight = basicElementSide * 5;
+var sectionHeight = basicElementSide * 6;
 
 var containerPosInfo;
 var pageTag = "";
