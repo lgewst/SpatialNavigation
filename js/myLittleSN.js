@@ -101,7 +101,12 @@ $(function() {
 		var posInfoObj;
 
 		if($(element).is("a")) {
-			posInfoObj = $(element).children()[0].getBoundingClientRect();
+			var tmp = $(element).children();
+			if($(element).children().length != 0){
+				posInfoObj = tmp[0].getBoundingClientRect();
+			} else {
+				posInfoObj = $(element).get(0).getBoundingClientRect();
+			}
 		} else {
 			posInfoObj = $(element).get(0).getBoundingClientRect();
 		}
