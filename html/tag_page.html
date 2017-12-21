@@ -17,10 +17,12 @@
 	<script src="../js/myLittleArrangement.js"></script>
 	<script type="text/javascript">
 		configuration.focusableElements = ["button", "input", "a", ".basic"];
-    configuration.scopeDecidableElements = [".main", ".content", ".pictures"];
+    configuration.scopeDecidableElements = [".modal-content", ".main", ".content", ".pictures"];
+    configuration.insuperableScopeElements = [".modal-content"];
 
+    pageTag = getUrlParameter('tag');
     window.load(function() {
-    	if(getUrlParameter('tag')) {
+    	if(pageTag) {
     		pageTag = getUrlParameter('tag');
     		$("button.tag").text("#" + pageTag).css({ 'font-weight': 'bold' })
     	}
@@ -46,7 +48,7 @@
 		<br>
 			<div class="content" style="display: flex;">
 				<div style="flex: 8; position: relative; bottom: 8px;">
-					<button class="tag"><strong>#main</strong></button>
+					<button class="tag"><strong></strong></button>
 				</div>
 				<div class="search" style="flex: 2; width: 40%; position: relative; left: 2%;">
 					<input type="text" class="searchbox" placeholder=" search tags">
