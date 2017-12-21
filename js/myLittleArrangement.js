@@ -18,10 +18,11 @@ function imageMaker(width, height, top, left, src, id, link) {
 	 												+ ") no-repeat; background-size: cover; background-origin: content-box; background-clip: content-box;\">");
 }
 
-function imageMakerTag(width, height, top, left, src, id, link) {
-	$("#container").append("<a href=\"" + link + "\" id=\"img" + cnt + "\" class=\"basic\" tabindex=\"-1\" data-keboard=\"true\" data-target=\"#layerpop\" data-toggle=\"modal\" style=\"position: absoulte; top:"
+function imageMakerTag(width, height, top, left, src, id, link, string) {
+	$("#container").append("<a href=\"" + link + "\" id=\"img" + cnt + "\" class=\"basic\" tabindex=\"-1\" data-keboard=\"true\" data-target=\"#layerpop" + id + "\" data-toggle=\"modal\" style=\"position: absoulte; top:"
 	 												+ top + "px; left:" + left + "px; width:" + width * basicElementSide + "px; height:"  + height * basicElementSide + "px; padding: 5px; background: url(" + src 
 	 												+ ") no-repeat; background-size: cover; background-origin: content-box; background-clip: content-box;\">");
+    $("#container").append("<div><div class=\"modal fade\" id=\"layerpop" + id + "\"><div class=\"modal-dialog\"><div class=\"modal-content\"><button class=\"close\" data-dismiss=\"modal\"><i class=\"fa fa-close\"></i></button>								<img class=\"modal-image\" src=\"" + src + "\" style=\"text-align: center; position: relative;\"><div class=\"modal-footer\"><h4>" + string + "</h4></div></div></div></div></div>");
 }
 
 function randomRatioGeneration(widthMaxRatio, heightMaxRatio) {
@@ -149,8 +150,7 @@ function nyopnyop() {
             for(var i=0; i<tagArray.length; i++)
                 string += "#" + tagArray[i] + " ";
 		    if(getUrlParameter('tag') != null) {
-				imageMakerTag(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], src, id, "../html/tag_page.html?tag=" + tagArray[0]);
-       			$("#container").append("<div><div class=\"modal fade\" id=\"layerpop\"><div class=\"modal-dialog\"><div class=\"modal-content\"><button class=\"close\" data-dismiss=\"modal\"><i class=\"fa fa-close\"></i></button>								<img class=\"modal-image\" src=\"" + src + "\" style=\"text-align: center; position: relative;\"><div class=\"modal-footer\"><p>" + string + "</p></div></div></div></div></div>");
+				imageMakerTag(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], src, id, "../html/tag_page.html?tag=" + tagArray[0], string);
     		} else {
     			imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], src, id, "../html/tag_page.html?tag=" + tagArray[0]);
     		}			

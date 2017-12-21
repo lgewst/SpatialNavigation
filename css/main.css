@@ -39,6 +39,9 @@ h3:before {
   margin: 30px;
   margin-top: 0px;
 }
+h4 {
+  font-family: 'Saira', sans-serif;
+}
 h5 {
   font-family: 'Saira', sans-serif;
   text-align: center;
