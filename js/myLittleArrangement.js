@@ -51,7 +51,7 @@ function estimateMaxRatio(arrangementPos) {
 	4 : Math.floor((containerPosInfo.bottom - containerPosInfo.top - arrangementPos[pos.y])/basicElementSide);
 
 	var temp = $.grep($.merge($.merge([], block), candidates), function (candidate) {
-		return arrangementPos[pos.x] < candidate[pos.x];
+		return arrangementPos[pos.x] <= candidate[pos.x];
 	});
 
 	if(temp.length != 0) {
@@ -67,7 +67,7 @@ function estimateMaxRatio(arrangementPos) {
 }
 
 function myElementFromPoint(x, y) {
-	var check=false, isRelative=true;
+/*	var check=false, isRelative=true;
 	if(!document.elementFromPoint) return null;
 
 	if(!check)
@@ -88,12 +88,14 @@ function myElementFromPoint(x, y) {
 	{
 		x += $(document).scrollLeft();
 		y += $(document).scrollTop();
-	}
+	}*/
 
-	return document.elementFromPoint(x,y);
+	return document.elementFromPoint(x - window.pageXOffset, y + $(document).scrollTop());
 }
 
 function nyopnyop() {
+
+		console.log("start!!");
 	for(var i=0; i<30; i++) {
 		candidates.sort(function(a, b) {
 			if(a[pos.y] == b[pos.y]) {
@@ -104,13 +106,17 @@ function nyopnyop() {
 		});
 
 		var arrangementPos;
+		var maxRatio;
+
 
 		do {
 			if(candidates.length == 0) { return }
 				arrangementPos = candidates.shift();
-		} while ($(myElementFromPoint(arrangementPos[pos.x] + containerPosInfo.left + 10, arrangementPos[pos.y] + containerPosInfo.top + 10)).is("a"))
+				maxRatio = estimateMaxRatio(arrangementPos);
+		} while ($(myElementFromPoint(arrangementPos[pos.x] + containerPosInfo.left + 10, arrangementPos[pos.y] + containerPosInfo.top + 10)).is("a") || maxRatio[rect.width] == 0)
+		
+		console.log(maxRatio[rect.width] + " : " + maxRatio[rect.height]);
 
-		var maxRatio = estimateMaxRatio(arrangementPos);
 		var ratios = randomRatioGeneration(maxRatio[rect.width], maxRatio[rect.height]);
 
 		//imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x]);
@@ -129,7 +135,7 @@ function nyopnyop() {
 			success: function(response) {
 				//alert("success : ");
 				$.each( response, function( key, val ) {
-    			console.log(key + " : " + val + "\n");
+    			//console.log(key + " : " + val + "\n");
     			if(key == "tag") tag = val;
     			if(key == "id") id = val;
     			if(key == "image_url") src = val;
@@ -199,10 +205,7 @@ $(function() {
 	$("#container").css({"width" : sectionWidth + 13 + "px", "height" : sectionHeight + 10 + "px", "background-color" : "#fff", "margin" : "0 auto"});
 	containerPosInfo = $("#container").get(0).getBoundingClientRect();
 
-	if(getUrlParameter('tag')) {
-		pageTag = getUrlParameter('tag');
-		$("button.tag").text("#" + pageTag).css({ 'font-weight': 'bold' })
-	}
+
 
 
 	nyopnyop();
