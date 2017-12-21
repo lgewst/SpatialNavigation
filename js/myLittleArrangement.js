@@ -10,6 +10,7 @@ var basicElementSide = Math.round(sectionWidth * basicElementSideRatio);
 var sectionHeight = basicElementSide * 5;
 
 var containerPosInfo;
+var pageTag = "";
 
 function imageMaker(width, height, top, left, src, id, link) {
 	$("#container").append("<a href=\"" + link + "\" id=\"img" + cnt + "\" class=\"basic\" tabindex=\"-1\" style=\"position: absoulte; top:"
@@ -114,11 +115,12 @@ function nyopnyop() {
 
 		//imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x]);
 /////////////////////////////////////////////////////////////////////////////////////////
-		var id, tag;
+
 		var url = function() {
+			var id, tag, src;
 			var data = "http://picturesque.ga/api/";
 		$.ajax ({
-			url: data + "get_image/" + ratios[rect.width] + ":" + ratios[rect.height] + "/",
+			url: data + "get_image/" + ratios[rect.width] + ":" + ratios[rect.height] + "/" + pageTag,
 			type: "GET",
 			dataType: 'json',
 			processData: false,
@@ -130,15 +132,17 @@ function nyopnyop() {
     			console.log(key + " : " + val + "\n");
     			if(key == "tag") tag = val;
     			if(key == "id") id = val;
-    			if(key == "image_url") {
-    				if(tag) {
-    					imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], val, id, data + "get_image/" + ratios[rect.width] + ":" + ratios[rect.height] + "/" + tag);
-    				} else {
-    					imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], val, id, data + "detail/" + id);
-    				}
-    			}
-  			});			
-			},
+    			if(key == "image_url") src = val;
+  			});
+
+				if(tag) {
+					imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], src, id, "../html/tag_page.html?tag=" + tag);
+    			// data + "get_image/" + ratios[rect.width] + ":" + ratios[rect.height] + "/" + tag
+    		} else {
+    			imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], src, id, "../html/tag_page.html");
+    			// data + "detail/" + id
+    		}			
+    	},
 			error: function(response) {
 				alert("post error");
 			}
@@ -176,10 +180,31 @@ function nyopnyop() {
 	}
 }
 
+function getUrlParameter(sParam) {
+	var sPageURL = decodeURIComponent(window.location.search.substring(1));
+	var sURLVariables = sPageURL.split('&');
+	var sParameterName;
+	var i;
+
+	for (i = 0; i < sURLVariables.length; i++) {
+		sParameterName = sURLVariables[i].split('=');
+
+		if (sParameterName[0] === sParam) {
+			return sParameterName[1] === undefined ? true : sParameterName[1];
+		}
+	}
+};
 
 $(function() {
 	$("#container").css({"width" : sectionWidth + 13 + "px", "height" : sectionHeight + 10 + "px", "background-color" : "#fff", "margin" : "0 auto"});
 	containerPosInfo = $("#container").get(0).getBoundingClientRect();
+
+	if(getUrlParameter('tag')) {
+		pageTag = getUrlParameter('tag');
+		$("button.tag").text("#" + pageTag).css({ 'font-weight': 'bold' })
+	}
+
+
 	nyopnyop();
 
 	//$("a:focus").css({"outline-clolr" : "#F8B195", "outline-style" : "dashed", "outline-width" : "4px"});
