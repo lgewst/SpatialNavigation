@@ -54,7 +54,7 @@ def get_image(request, size, tag):
         return HttpResponseNotAllowed(['GET'])
 
 def get_image_error(request, size, tag):
-    return HttpResponseNotFound()
+    return HttpResponse(status=204)
 
 def detail_image(request, id):
     if request.method == 'GET':
