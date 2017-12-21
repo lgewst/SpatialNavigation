@@ -9,16 +9,20 @@
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="../js/myLittleSN.js"></script>
+  <script type="text/javascript">
+    configuration.focusableElements = ["button", "input", "a", ".basic"];
+    configuration.scopeDecidableElements = [".main", ".content", ".pictures", "container"];
+  </script>
 </head>
 <body>
 
 	<div class="content">
-		<div class="logo"><a href="javascript:void(0);" onclick="location.href='http://s3.ap-northeast-2.amazonaws.com/picturesqueimages/front/html/index_signed.html'; return false;"><img src="./images/logo.png" style="width:40%"></a></div>
+		<div class="logo"><a href="javascript:void(0);" onclick="location.href='index_signed.html'; return false;"><img src="./images/logo.png" style="width:40%"></a></div>
 		<h3>
 			Click the button to upload your image.
 		</h3>
 		<div style="text-align: center; margin-top: 50px">
-			<button class="white" onclick="location.href='http://s3.ap-northeast-2.amazonaws.com/picturesqueimages/front/html/upload.html'; return false;"><strong>upload</strong></button>
+			<button class="white" onclick="location.href='upload.html'; return false;"><strong>upload</strong></button>
 			<button class="pink" onclick="javascript:history.back()"><strong>cancel</strong></button>
 		</div>
 	</div>

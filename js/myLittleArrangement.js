@@ -14,13 +14,13 @@ var pageTag = "";
 
 function imageMaker(width, height, top, left, src, id, link) {
 	$("#container").append("<a href=\"" + link + "\" id=\"img" + cnt + "\" class=\"basic\" tabindex=\"-1\" style=\"position: absoulte; top:"
-	 												+ top + "px; left:" + left + "px; width:" + width * basicElementSide + "px; height:"  + height * basicElementSide + "px; padding: 5px; background: url(" + src 
+	 												+ top + "px; left:" + left + "px; width:" + width * basicElementSide + "px; height:"  + height * basicElementSide + "px; padding: 5px; background: url(" + src
 	 												+ ") no-repeat; background-size: cover; background-origin: content-box; background-clip: content-box;\">");
 }
 
 function imageMakerTag(width, height, top, left, src, id, link, string) {
 	$("#container").append("<a href=\"" + link + "\" id=\"img" + cnt + "\" class=\"basic\" tabindex=\"-1\" data-keboard=\"true\" data-target=\"#layerpop" + id + "\" data-toggle=\"modal\" style=\"position: absoulte; top:"
-	 												+ top + "px; left:" + left + "px; width:" + width * basicElementSide + "px; height:"  + height * basicElementSide + "px; padding: 5px; background: url(" + src 
+	 												+ top + "px; left:" + left + "px; width:" + width * basicElementSide + "px; height:"  + height * basicElementSide + "px; padding: 5px; background: url(" + src
 	 												+ ") no-repeat; background-size: cover; background-origin: content-box; background-clip: content-box;\">");
     $("#container").append("<div><div class=\"modal fade\" id=\"layerpop" + id + "\"><div class=\"modal-dialog\"><div class=\"modal-content\"><button class=\"close\" data-dismiss=\"modal\"><i class=\"fa fa-close\"></i></button>"
     	                     + "<img class=\"modal-image\" src=\"" + src + "\" style=\"text-align: center; position: relative;\"><div class=\"modal-footer\"><h4>" + string + "</h4></div></div></div></div></div>");
@@ -50,7 +50,7 @@ function randomRatioGeneration(widthMaxRatio, heightMaxRatio) {
 
 function estimateMaxRatio(arrangementPos) {
 	var widthMaxRatio2 = 4;
-	var widthMaxRatio1 = 4 <= (containerPosInfo.right - containerPosInfo.left - arrangementPos[pos.x])/basicElementSide ? 
+	var widthMaxRatio1 = 4 <= (containerPosInfo.right - containerPosInfo.left - arrangementPos[pos.x])/basicElementSide ?
 	4 : Math.floor((containerPosInfo.right - containerPosInfo.left - arrangementPos[pos.x])/basicElementSide);
 	var heightMaxRatio = 4 <= (containerPosInfo.bottom - containerPosInfo.top - arrangementPos[pos.y])/basicElementSide ?
 	4 : Math.floor((containerPosInfo.bottom - containerPosInfo.top - arrangementPos[pos.y])/basicElementSide);
@@ -64,7 +64,7 @@ function estimateMaxRatio(arrangementPos) {
 			return a[pos.x] - b[pos.x];
 		}).shift();
 
-		widthMaxRatio2 = 4 <= (canBlock[pos.x] - arrangementPos[pos.x])/basicElementSide ? 
+		widthMaxRatio2 = 4 <= (canBlock[pos.x] - arrangementPos[pos.x])/basicElementSide ?
 		4 : Math.floor((canBlock[pos.x] - arrangementPos[pos.x])/basicElementSide);
 	}
 
@@ -92,7 +92,7 @@ function nyopnyop() {
 				arrangementPos = candidates.shift();
 				maxRatio = estimateMaxRatio(arrangementPos);
 		} while ($(document.elementFromPoint(arrangementPos[pos.x] + containerPosInfo.left + 10, arrangementPos[pos.y] + containerPosInfo.top + 10)).is("a") || maxRatio[rect.width] == 0)
-		
+
 		console.log(maxRatio[rect.width] + " : " + maxRatio[rect.height]);
 
 		var ratios = randomRatioGeneration(maxRatio[rect.width], maxRatio[rect.height]);
@@ -121,13 +121,15 @@ function nyopnyop() {
 					for(var i=0; i<tagArray.length; i++)
 						string += "#" + tagArray[i] + " ";
 					if(getUrlParameter('tag') != null) {
+					  console.log(src)
 						imageMakerTag(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], src, id, "../html/tag_page.html?tag=" + tagArray[0], string);
 					} else {
 						imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], src, id, "../html/tag_page.html?tag=" + tagArray[0]);
-					}			
+					}
 				},
 				error: function(response) {
-					alert("post error");
+					// alert("post error");
+          console.log("post error");
 				}
 			});
 		}
@@ -205,6 +207,6 @@ $(function() {
 	//src = url();
 
 	//console.log("haha : " + src);
-	
+
 	// imageMaker(basicElementSide, basicElementSide, 10, 10, "https://picturesqueimages.s3.amazonaws.com/media/images/no_login/20171219195815.jpg");
-}); 
+});
