@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Index</title>
+	<title>Detail</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -17,7 +17,7 @@
 	<script src="../js/myLittleArrangement.js"></script>
 	<script type="text/javascript">
 		configuration.focusableElements = ["button", "input", "a", ".basic"];
-        configuration.scopeDecidableElements = [".main", ".content", ".pictures"];
+        configuration.scopeDecidableElements = [".main", ".content", ".pictures", "container"];
 	</script>
 </head>
 <body>
@@ -42,7 +42,7 @@
 					<button class="tag"><strong>#main</strong></button>
 				</div>
 				<div class="search" style="flex: 2; width: 40%; position: relative; left: 2%;">
-					<input type="text" class="searchbox" placeholder=" search tags">
+					<input type="text" class="searchbox" placeholder=" search tags" style="height: 36px">
 					<button type="submit" class="searchbutton"><i class="fa fa-search"></i></button>
 				</div>
 			</div>
@@ -53,18 +53,20 @@
 				    	<i class="fa fa-caret-left" style="font-size:60px; color: #F67280"></i>
 				    </button>
 				</div>
-                <div style="test-align: center;">
-                    <button class="btn btn-default" data-target="#layerpop" data-toggle="modal">layer pop up test</button>
+                <div>
+                	<div style="text-align: center;">
+                    	<button class="btn btn-default" data-target="#layerpop" data-toggle="modal">layer pop up test</button>
+                	</div>
 				    <div class="modal fade" id="layerpop">
 					    <div class="modal-dialog">
 						    <div class="modal-content">
-
-                            <button type="button" class="btn btn-default" data-dismiss="modal">x</button>
+	                            <button class="close" data-dismiss="modal"><i class="fa fa-close"></i></button>
+								<img class="modal-image" src="./images/1.jpg" style="text-align: center; position: relative;">
                             </div>
                         </div>
                     </div>
                 </div>
-				<!--<div id="container"></div>-->
+				<div id="container"></div>
 				<div>
 					<button class="icon" style="position: absolute; right: 20px; top: 550px;">
 				    	<i class="fa fa-caret-right" style="font-size:60px; color: #F67280"></i>
