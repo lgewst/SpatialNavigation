@@ -7,17 +7,20 @@
 
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" type="text/css" href="../css/main.css">
+	<!--link rel="stylesheet" type="text/css" href="../css/arrangeTest.css"-->
 	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="../js/myLittleSN.js"></script>
 	<script src="../js/myLittleArrangement.js"></script>
 	<script type="text/javascript">
 		configuration.focusableElements = ["button", "input", "a", ".basic"];
-        configuration.scopeDecidableElements = [".main", ".content", ".pictures"];
+    configuration.scopeDecidableElements = [".main", ".content", ".pictures"];
+
+    if(getUrlParameter('tag')) {
+			pageTag = getUrlParameter('tag');
+			$("button.tag").text("#" + pageTag).css({ 'font-weight': 'bold' })
+		}
 	</script>
 </head>
 <body>
@@ -53,18 +56,7 @@
 				    	<i class="fa fa-caret-left" style="font-size:60px; color: #F67280"></i>
 				    </button>
 				</div>
-                <div style="test-align: center;">
-                    <button class="btn btn-default" data-target="#layerpop" data-toggle="modal">layer pop up test</button>
-				    <div class="modal fade" id="layerpop">
-					    <div class="modal-dialog">
-						    <div class="modal-content">
-
-                            <button type="button" class="btn btn-default" data-dismiss="modal">x</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-				<!--<div id="container"></div>-->
+				<div id="container"></div>
 				<div>
 					<button class="icon" style="position: absolute; right: 20px; top: 550px;">
 				    	<i class="fa fa-caret-right" style="font-size:60px; color: #F67280"></i>

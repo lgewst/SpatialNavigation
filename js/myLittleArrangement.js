@@ -7,13 +7,18 @@ var sectionWidth = $(window).width() * 0.7;
 
 var basicElementSideRatio = 0.125;
 var basicElementSide = Math.round(sectionWidth * basicElementSideRatio);
-var sectionHeight = basicElementSide * 5;
+var sectionHeight = basicElementSide * 6;
 
 var containerPosInfo;
+var pageTag = "";
 
-function imageMaker(width, height, top, left, src) {
-	$("#container").append("<img id=\"img" + cnt + "\" src=\"" + src + "\" class=\"basic\" tabindex=\"-1\" style=\"position: absoulte; top:" + top + "px; left:" + left
-		+ "px; width:" + width * basicElementSide + "px; height:"  + height * basicElementSide + "px; padding: 5px;\">");
+function imageMaker(width, height, top, left, src, id, link) {
+	$("#container").append("<a href=\"" + link + "\" id=\"img" + cnt + "\" class=\"basic\" tabindex=\"-1\" style=\"position: absoulte; top:"
+	 												+ top + "px; left:" + left + "px; width:" + width * basicElementSide + "px; height:"  + height * basicElementSide + "px; padding: 5px; background: url(" + src 
+	 												+ ") no-repeat; background-size: cover; background-origin: content-box; background-clip: content-box;\">");
+
+	 												// + "<img id=\"" +"img" + cnt + "\" src=\"" + src + "\" class=\"basic\" tabindex=\"-1\" style=\"position: absoulte; top:"
+	 												//+ top + "px; left:" + left + "px; width:" + width * basicElementSide + "px; height:"  + height * basicElementSide + "px; padding: 5px;\">" + "</a>");
 }
 
 function randomRatioGeneration(widthMaxRatio, heightMaxRatio) {
@@ -46,7 +51,7 @@ function estimateMaxRatio(arrangementPos) {
 	4 : Math.floor((containerPosInfo.bottom - containerPosInfo.top - arrangementPos[pos.y])/basicElementSide);
 
 	var temp = $.grep($.merge($.merge([], block), candidates), function (candidate) {
-		return arrangementPos[pos.x] < candidate[pos.x];
+		return arrangementPos[pos.x] <= candidate[pos.x];
 	});
 
 	if(temp.length != 0) {
@@ -62,7 +67,7 @@ function estimateMaxRatio(arrangementPos) {
 }
 
 function myElementFromPoint(x, y) {
-	var check=false, isRelative=true;
+/*	var check=false, isRelative=true;
 	if(!document.elementFromPoint) return null;
 
 	if(!check)
@@ -83,12 +88,14 @@ function myElementFromPoint(x, y) {
 	{
 		x += $(document).scrollLeft();
 		y += $(document).scrollTop();
-	}
+	}*/
 
-	return document.elementFromPoint(x,y);
+	return document.elementFromPoint(x - window.pageXOffset, y + $(document).scrollTop());
 }
 
 function nyopnyop() {
+
+		console.log("start!!");
 	for(var i=0; i<30; i++) {
 		candidates.sort(function(a, b) {
 			if(a[pos.y] == b[pos.y]) {
@@ -99,20 +106,27 @@ function nyopnyop() {
 		});
 
 		var arrangementPos;
+		var maxRatio;
+
 
 		do {
 			if(candidates.length == 0) { return }
 				arrangementPos = candidates.shift();
-		} while ($(myElementFromPoint(arrangementPos[pos.x] + containerPosInfo.left + 10, arrangementPos[pos.y] + containerPosInfo.top + 10)).is("img"))
+				maxRatio = estimateMaxRatio(arrangementPos);
+		} while ($(myElementFromPoint(arrangementPos[pos.x] + containerPosInfo.left + 10, arrangementPos[pos.y] + containerPosInfo.top + 10)).is("a") || maxRatio[rect.width] == 0)
+		
+		console.log(maxRatio[rect.width] + " : " + maxRatio[rect.height]);
 
-		var maxRatio = estimateMaxRatio(arrangementPos);
 		var ratios = randomRatioGeneration(maxRatio[rect.width], maxRatio[rect.height]);
 
 		//imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x]);
-/////////////////////////////////////////////////////////////////////////////////////////		
+/////////////////////////////////////////////////////////////////////////////////////////
+
 		var url = function() {
+			var id, tag, src;
+			var data = "http://picturesque.ga/api/";
 		$.ajax ({
-			url: "http://picturesque.ga/api/get_image/" + ratios[rect.width] + ":" + ratios[rect.height] + "/sky",
+			url: data + "get_image/" + ratios[rect.width] + ":" + ratios[rect.height] + "/" + pageTag,
 			type: "GET",
 			dataType: 'json',
 			processData: false,
@@ -121,12 +135,20 @@ function nyopnyop() {
 			success: function(response) {
 				//alert("success : ");
 				$.each( response, function( key, val ) {
-    			console.log(key + " : " + val + "\n");
-    			if(key == "image_url") {
-    				imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], val);
-    			}
-  			});			
-			},
+    			//console.log(key + " : " + val + "\n");
+    			if(key == "tag") tag = val;
+    			if(key == "id") id = val;
+    			if(key == "image_url") src = val;
+  			});
+
+				if(tag) {
+					imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], src, id, "../html/tag_page.html?tag=" + tag);
+    			// data + "get_image/" + ratios[rect.width] + ":" + ratios[rect.height] + "/" + tag
+    		} else {
+    			imageMaker(ratios[rect.width], ratios[rect.height], arrangementPos[pos.y], arrangementPos[pos.x], src, id, "../html/tag_page.html");
+    			// data + "detail/" + id
+    		}			
+    	},
 			error: function(response) {
 				alert("post error");
 			}
@@ -134,7 +156,6 @@ function nyopnyop() {
 		}
 		var temp = url();
 ////////////////////////////////////////////////////////////////////////////////////
-
 		var imgPosInfo = $("#img" + cnt).get(0).getBoundingClientRect();
 
 		if(basicElementSide < containerPosInfo.bottom - imgPosInfo.bottom) {
@@ -165,11 +186,31 @@ function nyopnyop() {
 	}
 }
 
+function getUrlParameter(sParam) {
+	var sPageURL = decodeURIComponent(window.location.search.substring(1));
+	var sURLVariables = sPageURL.split('&');
+	var sParameterName;
+	var i;
+
+	for (i = 0; i < sURLVariables.length; i++) {
+		sParameterName = sURLVariables[i].split('=');
+
+		if (sParameterName[0] === sParam) {
+			return sParameterName[1] === undefined ? true : sParameterName[1];
+		}
+	}
+};
 
 $(function() {
-	$("#container").css({"width" : sectionWidth + 10 + "px", "height" : sectionHeight + 10 + "px", "background-color" : "#fff", "margin" : "0 auto"});
+	$("#container").css({"width" : sectionWidth + 13 + "px", "height" : sectionHeight + 10 + "px", "background-color" : "#fff", "margin" : "0 auto"});
 	containerPosInfo = $("#container").get(0).getBoundingClientRect();
+
+
+
+
 	nyopnyop();
+
+	//$("a:focus").css({"outline-clolr" : "#F8B195", "outline-style" : "dashed", "outline-width" : "4px"});
 
 	//var temp = randomRatioGeneration(4, 4);
 	//var src;
