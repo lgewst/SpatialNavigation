@@ -19,7 +19,7 @@ function imageMaker(width, height, top, left, src, id, link) {
 }
 
 function imageMakerTag(width, height, top, left, src, id, link, string) {
-	$("#container").append("<img id=\"img" + cnt + "\" class=\"basic\" tabindex=\"-1\" data-keboard=\"true\" data-target=\"#layerpop" + id + "\" data-toggle=\"modal\" style=\"position: absoulte; top:"
+	$("#container").append("<a href=\"#\" id=\"img" + cnt + "\" class=\"basic\" tabindex=\"-1\" data-keboard=\"true\" data-target=\"#layerpop" + id + "\" data-toggle=\"modal\" style=\"position: absoulte; top:"
 	 												+ top + "px; left:" + left + "px; width:" + width * basicElementSide + "px; height:"  + height * basicElementSide + "px; padding: 5px; background: url(" + src
 	 												+ ") no-repeat; background-size: cover; background-origin: content-box; background-clip: content-box;\">");
     $("#container").append("<div><div class=\"modal fade\" id=\"layerpop" + id + "\"><div class=\"modal-dialog\"><div class=\"modal-content\"><button class=\"close\" data-dismiss=\"modal\"><i class=\"fa fa-close\"></i></button>"
