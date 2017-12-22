@@ -529,4 +529,6 @@ $(function() {
 	}
 
 	fourWayKeysListener();
+
+	$(getMostLeftElem(getAllCandidates()).raw).focus();
 });
